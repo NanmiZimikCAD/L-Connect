@@ -30,20 +30,77 @@ Most logistics software is designed for large enterprises, leaving smaller compa
 ```
 L-Connect/
 ├── Controllers/
-│   ├── HomeController.cs
-│   └── AccountController.cs
+│   ├── AccountController.cs        # Authentication & user management
+│   ├── AdminController.cs          # Admin features
+│   ├── ClientController.cs         # Client dashboard & features
+│   ├── HomeController.cs           # Public pages
+│   ├── TrackingController.cs       # Tracking functionality
+│   └── QuoteController.cs          # Quote requests
+├── Data/
+│   ├── Migrations/
+│   └── ApplicationDbContext.cs
 ├── Models/
-│   ├── ErrorViewModel.cs
-│   └── ViewModels/
+│   ├── Domain/
+│   │   ├── Role.cs                 # User roles
+│   │   ├── User.cs                 # User information
+│   │   ├── Shipment.cs             # Shipment tracking
+│   │   ├── Quote.cs                # Quote requests
+│   │   └── Document.cs             # File attachments
+│   ├── ViewModels/
+│   │   ├── Auth/
+│   │   │   ├── LoginViewModel.cs
+│   │   │   └── RegisterViewModel.cs
+│   │   ├── Tracking/
+│   │   │   └── TrackingViewModel.cs
+│   │   └── Quote/
+│   │       └── QuoteViewModel.cs
+│   └── ErrorViewModel.cs
+├── Services/
+│   ├── Interfaces/
+│   │   ├── IUserService.cs
+│   │   ├── IShipmentService.cs
+│   │   └── IQuoteService.cs
+│   └── Implementations/
+│       ├── UserService.cs
+│       ├── ShipmentService.cs
+│       └── QuoteService.cs
 ├── Views/
-│   ├── Home/
-│   │   └── Index.cshtml
 │   ├── Account/
+│   │   ├── Login.cshtml
+│   │   └── Register.cshtml
+│   ├── Admin/
+│   │   ├── Dashboard.cshtml
+│   │   ├── Shipments/
+│   │   │   ├── Create.cshtml
+│   │   │   └── List.cshtml
+│   │   └── Reports/
+│   │       └── Index.cshtml
+│   ├── Client/
+│   │   ├── Dashboard.cshtml
+│   │   └── Shipments/
+│   │       └── List.cshtml
+│   ├── Home/
+│   │   ├── Index.cshtml           # Landing page
+│   │   └── Privacy.cshtml
+│   ├── Tracking/
+│   │   ├── Index.cshtml           # Tracking search
+│   │   └── Result.cshtml          # Tracking results
+│   ├── Quote/
+│   │   └── Request.cshtml         # Quote form
 │   └── Shared/
-│       └── _Layout.cshtml
+│       ├── _AdminLayout.cshtml    # Admin layout
+│       ├── _ClientLayout.cshtml   # Client layout
+│       ├── _Layout.cshtml         # Main layout
+│       ├── _ValidationScriptsPartial.cshtml
+│       └── _ViewImports.cshtml
 └── wwwroot/
     ├── css/
+    │   └── site.css
     ├── js/
+    │   ├── tracking.js
+    │   ├── quote.js
+    │   └── site.js
+    ├── lib/                       # Third-party libraries
     └── images/
 ```
 
@@ -125,7 +182,10 @@ git pull origin main
 - Refer to team lead for specific project details
 
 ## Contact
-[Add contact information or team lead's contact]
+- Team Lead: [nzimik5599@conestogac.on.ca]
+- Developer: [tbano9947@conestogac.on.ca]
+- Developer: [srapol7701@conestogac.on.ca]
+- Developer: [yhuang3398@conestogac.on.ca]
 ```
 
 ## Future Roadmap
