@@ -1,0 +1,152 @@
+@model L_Connect.Models.ViewModels.Tracking.TrackingResultViewModel
+
+@{
+    ViewData["Title"] = "Shipment Tracking Results";
+}
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Tracking Number: @Model.TrackingNumber</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Shipment Details</h5>
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th>Status:</th>
+                                            <td>
+                                                <span class="badge @(Model.IsDelivered ? "bg-success" : "bg-primary")">
+                                                    @Model.CurrentStatus
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Current Location:</th>
+                                            <td>@Model.CurrentLocation</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipment Date:</th>
+                                            <td>@Model.FormattedCreationDate</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Estimated Delivery:</th>
+                                            <td>@Model.FormattedEstimatedDelivery</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Address Information</h5>
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th>From:</th>
+                                            <td>@Model.OriginAddress</td>
+                                        </tr>
+                                        <tr>
+                                            <th>To:</th>
+                                            <td>@Model.DestinationAddress</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.CanAccessDocuments)
+                    {
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-file-alt me-2"></i> As a registered client, you can access shipment documents. 
+                                    <a href="#" class="alert-link">View Documents</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Tracking History</h4>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        @if (Model.StatusHistory != null && Model.StatusHistory.Count > 0)
+                        {
+                            @foreach (var status in Model.StatusHistory.OrderByDescending(s => s.UpdatedAt))
+                            {
+                                <div class="timeline-item mb-4">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="timeline-date">
+                                                <i class="fas fa-calendar-alt me-2"></i> @status.FormattedDate
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="timeline-content p-3 border-start border-primary border-3">
+                                                <h5 class="mb-1">@status.Status</h5>
+                                                <p class="mb-1"><strong>Location:</strong> @status.Location</p>
+                                                @if (!string.IsNullOrEmpty(status.Notes))
+                                                {
+                                                    <p class="mb-0 text-muted"><strong>Notes:</strong> @status.Notes</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                No detailed status history available for this shipment.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a asp-controller="Tracking" asp-action="Index" class="btn btn-outline-primary">
+                <i class="fas fa-search me-2"></i>Track Another Shipment
+            </a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-home me-2"></i>Return to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline-item {
+        position: relative;
+    }
+    
+    .timeline-date {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+    
+    .timeline-content {
+        background-color: #ffffff;
+        border-radius: 4px;
+    }
+</style>

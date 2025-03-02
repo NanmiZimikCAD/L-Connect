@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
+//class that handles new user registration data, including validated fields for email, password (with confirmation), full name, and contact number - it ensures proper validation of user input during the registration process in the L-Connect system.
 namespace L_Connect.Models.ViewModels.Auth
 {
     public class RegisterViewModel

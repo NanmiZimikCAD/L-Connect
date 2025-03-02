@@ -1,0 +1,38 @@
+@model L_Connect.Models.ViewModels.Tracking.TrackingViewModel
+
+@{
+    ViewData["Title"] = "Track Your Shipment";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">Track Your Shipment</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-controller="Tracking" asp-action="Index" method="post">
+                        <div class="form-group mb-4">
+                            <label asp-for="TrackingNumber" class="form-label">Enter Tracking Number</label>
+                            <div class="input-group">
+                                <input asp-for="TrackingNumber" class="form-control form-control-lg" placeholder="e.g. LC-2402-123456" />
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>Track
+                                </button>
+                            </div>
+                            <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p class="text-muted">Enter your tracking number to get detailed information about your shipment.</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
