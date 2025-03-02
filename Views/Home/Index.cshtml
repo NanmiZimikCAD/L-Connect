@@ -3,7 +3,7 @@
 }
 
 <!-- Hero Section with Tracking -->
-<div class="hero-section py-5">
+@* <div class="hero-section py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -15,6 +15,25 @@
                             <i class="fas fa-search me-2"></i>Track
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> *@
+<div class="hero-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="tracking-box bg-white p-4 rounded shadow">
+                    <h2 class="text-center mb-4">Track Your Shipment</h2>
+                    <form asp-controller="Tracking" asp-action="Index" method="post">
+                        <div class="input-group">
+                            <input type="text" name="TrackingNumber" class="form-control form-control-lg" placeholder="Enter tracking number" required>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search me-2"></i>Track
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

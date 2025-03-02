@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+//User model class that maps to the "USERS" database table, storing essential user information like email, password hash, name, contact details, and their assigned role - it's the core entity for managing user accounts in the L-Connect system.
+
 namespace L_Connect.Models.Domain
 {
     [Table("USERS")]

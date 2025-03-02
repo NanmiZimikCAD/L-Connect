@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using L_Connect.Models;
-
+// HomeController manages public-facing pages including landing page and general information
 namespace L_Connect.Controllers;
 
 public class HomeController : Controller

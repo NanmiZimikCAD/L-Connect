@@ -3,11 +3,21 @@ using L_Connect.Data;
 using L_Connect.Models.Domain;
 using Microsoft.AspNetCore.Identity;  // Added this for IPasswordHasher
 using Microsoft.AspNetCore.Authentication.Cookies;// Added this for Authentication
+using L_Connect.Services.Interfaces;
+using L_Connect.Services.Implementations;
+
+// - Database connection
+// - Authentication services
+// - Cookie settings
+// - Password hasher service
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register application services
+builder.Services.AddScoped<IShipmentService, ShipmentService>();
 
 // Add Cookie Authentication
 builder.Services.AddAuthentication(options =>

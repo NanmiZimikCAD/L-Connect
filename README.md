@@ -17,10 +17,10 @@ Most logistics software is designed for large enterprises, leaving smaller compa
 ### Target Market:
 - Small logistics companies with limited digital infrastructure
 - Businesses looking for efficient tracking and management solutions
-- International cargo transportation service providers
+- International parcel transportation service providers
 
 ## Key Features (Planned/Implemented):
-- Comprehensive cargo tracking
+- Comprehensive parcel tracking
 - Client communication management
 - Operational workflow digitization
 - Affordable and lightweight solution
@@ -44,6 +44,7 @@ L-Connect/
 │   │   ├── Role.cs                 # User roles
 │   │   ├── User.cs                 # User information
 │   │   ├── Shipment.cs             # Shipment tracking
+│   │   └── ShipmentStatus.cs       # Shipment Status information
 │   │   ├── Quote.cs                # Quote requests
 │   │   └── Document.cs             # File attachments
 │   ├── ViewModels/
@@ -52,6 +53,8 @@ L-Connect/
 │   │   │   └── RegisterViewModel.cs
 │   │   ├── Tracking/
 │   │   │   └── TrackingViewModel.cs
+│   │   └── Client/
+│   │       └── ClientDashboardViewModel.cs
 │   │   └── Quote/
 │   │       └── QuoteViewModel.cs
 │   └── ErrorViewModel.cs

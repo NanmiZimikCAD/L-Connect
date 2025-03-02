@@ -37,3 +37,28 @@
 .btn-outline-light:hover {
   color: #2a2391;
 }
+/* Tracking Timeline Styles */
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-date {
+  padding: 10px;
+  font-weight: 500;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.timeline-content {
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .timeline-date {
+      margin-bottom: 0.5rem;
+  }
+}
