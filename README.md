@@ -30,81 +30,83 @@ Most logistics software is designed for large enterprises, leaving smaller compa
 ```
 L-Connect/
 ├── Controllers/
-│   ├── AccountController.cs        # Authentication & user management
-│   ├── AdminController.cs          # Admin features
-│   ├── ClientController.cs         # Client dashboard & features
-│   ├── HomeController.cs           # Public pages
-│   ├── TrackingController.cs       # Tracking functionality
+│   ├── AccountController.cs        # Authentication & user management - created
+│   ├── AdminController.cs          # Admin features - created
+│   ├── ClientController.cs         # Client dashboard & features - created
+│   ├── HomeController.cs           # Public pages - created
+│   ├── TrackingController.cs       # Tracking functionality - created
 │   └── QuoteController.cs          # Quote requests
 ├── Data/
 │   ├── Migrations/
-│   └── ApplicationDbContext.cs
+│   └── ApplicationDbContext.cs     # - created
 ├── Models/
 │   ├── Domain/
-│   │   ├── Role.cs                 # User roles
-│   │   ├── User.cs                 # User information
-│   │   ├── Shipment.cs             # Shipment tracking
-│   │   └── ShipmentStatus.cs       # Shipment Status information
+│   │   ├── Role.cs                 # User roles - created
+│   │   ├── User.cs                 # User information - created
+│   │   ├── Shipment.cs             # Shipment tracking - created
+│   │   └── ShipmentStatus.cs       # Shipment Status information  - created
 │   │   ├── Quote.cs                # Quote requests
 │   │   └── Document.cs             # File attachments
 │   ├── ViewModels/
 │   │   ├── Auth/
-│   │   │   ├── LoginViewModel.cs
-│   │   │   └── RegisterViewModel.cs
+│   │   │   ├── LoginViewModel.cs   # Login form data - created
+│   │   │   └── RegisterViewModel.cs    # Registration form data - created
 │   │   ├── Tracking/
-│   │   │   └── TrackingViewModel.cs
+│   │   │   ├── TrackingResultViewModel.cs  # Tracking result data - created
+│   │   │   └── TrackingViewModel.cs # Tracking data - created
 │   │   └── Client/
-│   │       └── ClientDashboardViewModel.cs
+│   │       └── ClientDashboardViewModel.cs # Client dashboard data - created
 │   │   └── Quote/
 │   │       └── QuoteViewModel.cs
-│   └── ErrorViewModel.cs
+│   └── ErrorViewModel.cs # Error handling - created
 ├── Services/
 │   ├── Interfaces/
 │   │   ├── IUserService.cs
-│   │   ├── IShipmentService.cs
+│   │   ├── IShipmentService.cs # Shipment tracking service Interface - created
 │   │   └── IQuoteService.cs
 │   └── Implementations/
 │       ├── UserService.cs
-│       ├── ShipmentService.cs
+│       ├── ShipmentService.cs # Shipment tracking service Implementations - created
 │       └── QuoteService.cs
 ├── Views/
 │   ├── Account/
-│   │   ├── Login.cshtml
-│   │   └── Register.cshtml
+│   │   ├── Login.cshtml # Login page - created
+│   │   └── Register.cshtml # Registration page - created
 │   ├── Admin/
-│   │   ├── Dashboard.cshtml
+│   │   ├── Dashboard.cshtml # Admin dashboard - created
 │   │   ├── Shipments/
 │   │   │   ├── Create.cshtml
 │   │   │   └── List.cshtml
 │   │   └── Reports/
 │   │       └── Index.cshtml
 │   ├── Client/
-│   │   ├── Dashboard.cshtml
+│   │   ├── Dashboard.cshtml # Client dashboard - created
 │   │   └── Shipments/
 │   │       └── List.cshtml
 │   ├── Home/
-│   │   ├── Index.cshtml           # Landing page
+│   │   ├── Index.cshtml           # Landing page - created
 │   │   └── Privacy.cshtml
 │   ├── Tracking/
-│   │   ├── Index.cshtml           # Tracking search
-│   │   └── Result.cshtml          # Tracking results
+│   │   ├── Index.cshtml           # Tracking search page - created
+│   │   └── Result.cshtml          # Tracking results page - created
 │   ├── Quote/
 │   │   └── Request.cshtml         # Quote form
 │   └── Shared/
-│       ├── _AdminLayout.cshtml    # Admin layout
-│       ├── _ClientLayout.cshtml   # Client layout
-│       ├── _Layout.cshtml         # Main layout
-│       ├── _ValidationScriptsPartial.cshtml
+│       ├── _AdminLayout.cshtml    # Admin layout - created
+│       ├── _ClientLayout.cshtml   # Client layout - created
+│       ├── _Layout.cshtml         # Main layout - created
+│       ├── _ValidationScriptsPartial.cshtml # Validation scripts - created
 │       └── _ViewImports.cshtml
-└── wwwroot/
-    ├── css/
-    │   └── site.css
-    ├── js/
-    │   ├── tracking.js
-    │   ├── quote.js
-    │   └── site.js
-    ├── lib/                       # Third-party libraries
-    └── images/
+│── wwwroot/
+│   ├── css/
+│   │   └── site.css
+│   ├── js/
+│   │   ├── tracking.js
+│   │   ├── quote.js
+│   │   └── site.js # Site scripts - created
+│   ├── lib/                       # Third-party libraries
+│   └── images/
+└── Program.cs # Entry point - created
 ```
 
 ## Prerequisites
