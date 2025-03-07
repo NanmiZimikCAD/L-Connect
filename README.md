@@ -35,7 +35,8 @@ L-Connect/
 │   ├── ClientController.cs         # Client dashboard & features
 │   ├── HomeController.cs           # Public pages
 │   ├── TrackingController.cs       # Tracking functionality
-│   └── QuoteController.cs          # Quote requests
+│   |── QuoteController.cs          # Quote requests
+|   └── ServicesController.cs       # Service page display
 ├── Data/
 │   ├── Migrations/
 │   └── ApplicationDbContext.cs
@@ -54,9 +55,11 @@ L-Connect/
 │   │   ├── Tracking/
 │   │   │   └── TrackingViewModel.cs
 │   │   └── Client/
-│   │       └── ClientDashboardViewModel.cs
+│   │   │   └── ClientDashboardViewModel.cs
 │   │   └── Quote/
-│   │       └── QuoteViewModel.cs
+│   │   |    └── QuoteViewModel.cs
+│   │   └── Services/
+|   |         └── ServiceViewModel.cs  
 │   └── ErrorViewModel.cs
 ├── Services/
 │   ├── Interfaces/
@@ -90,6 +93,8 @@ L-Connect/
 │   │   └── Result.cshtml          # Tracking results
 │   ├── Quote/
 │   │   └── Request.cshtml         # Quote form
+|   |── Services/
+|   |   └── Index.cshtml           # Services Table
 │   └── Shared/
 │       ├── _AdminLayout.cshtml    # Admin layout
 │       ├── _ClientLayout.cshtml   # Client layout

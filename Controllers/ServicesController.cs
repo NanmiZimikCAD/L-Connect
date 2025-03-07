@@ -12,7 +12,7 @@ namespace L_Connect.Controllers.Services
             {
                 new ServiceViewModel 
                 {
-                    Route = "Shenzhen to Brazil",
+                    Route = "Shenzhen to Sao Paulo",
                     TransportationMethods = new List<string> { "Flight", "Sea" },
                     BasePrices = new Dictionary<string, decimal>
                     {
@@ -26,7 +26,7 @@ namespace L_Connect.Controllers.Services
                 },
                 new ServiceViewModel 
                 {
-                    Route = "Shenzhen to Iguazú",
+                    Route = "Shenzhen to Ushuaia",
                     TransportationMethods = new List<string> { "Flight", "Sea" },
                     BasePrices = new Dictionary<string, decimal>
                     {
@@ -40,17 +40,59 @@ namespace L_Connect.Controllers.Services
                 },
                 new ServiceViewModel 
                 {
-                    Route = "Shenzhen to Canada",
+                    Route = "Shenzhen to Toronto",
                     TransportationMethods = new List<string> { "Flight", "Sea" },
                     BasePrices = new Dictionary<string, decimal>
                     {
-                        {"Flight", 280m },
-                        {"Sea", 200m }
+                        {"Flight", 290m },
+                        {"Sea", 210m }
                     },
                     BulkThreshold = 12,
                     BulkDiscountRate = 0.15m, // 15% discount if over 12 parcels
                     CustomServiceCharge = 55m,
                     InsuranceCharge = 30m
+                },
+                new ServiceViewModel 
+                {
+                    Route = "Shenzhen to Vancouver",
+                    TransportationMethods = new List<string> { "Flight", "Sea" },
+                    BasePrices = new Dictionary<string, decimal>
+                    {
+                        {"Flight", 275m },
+                        {"Sea", 195m }
+                    },
+                    BulkThreshold = 12,
+                    BulkDiscountRate = 0.15m, // 15% discount if over 12 parcels
+                    CustomServiceCharge = 55m,
+                    InsuranceCharge = 30m
+                },
+                new ServiceViewModel 
+                {
+                    Route = "Shenzhen to Mexico City",
+                    TransportationMethods = new List<string> { "Flight", "Sea" },
+                    BasePrices = new Dictionary<string, decimal>
+                    {
+                        {"Flight", 260m },
+                        {"Sea", 210m }
+                    },
+                    BulkThreshold = 12,
+                    BulkDiscountRate = 0.15m, // 15% discount if over 12 parcels
+                    CustomServiceCharge = 30m,
+                    InsuranceCharge = 20m
+                },
+                new ServiceViewModel 
+                {
+                    Route = "Shenzhen to Lima",
+                    TransportationMethods = new List<string> { "Flight", "Sea" },
+                    BasePrices = new Dictionary<string, decimal>
+                    {
+                        {"Flight", 270m },
+                        {"Sea", 220m }
+                    },
+                    BulkThreshold = 12,
+                    BulkDiscountRate = 0.15m, // 15% discount if over 12 parcels
+                    CustomServiceCharge = 30m,
+                    InsuranceCharge = 20m
                 }
             };
 
