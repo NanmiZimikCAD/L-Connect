@@ -163,5 +163,17 @@ namespace L_Connect.Services.Implementations
             
             return $"LC-{dateComponent}-{randomComponent}";
         }
+
+        // public Task<List<Shipment>> GetAllShipmentsAsync()
+        // {
+        //     throw new NotImplementedException();
+        // }
+        public async Task<List<Shipment>> GetAllShipmentsAsync()
+        {
+            return await _context.Shipments
+                .Include(s => s.Client)
+                .OrderByDescending(s => s.CreatedAt)
+                .ToListAsync();
+        }
     }
 }

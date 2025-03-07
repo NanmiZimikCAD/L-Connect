@@ -25,9 +25,16 @@ namespace L_Connect.Controllers
         }
 
         // Existing Dashboard method remains unchanged
-        public IActionResult Dashboard()
+        // public IActionResult Dashboard()
+        // {
+        //     return View();
+        // }
+        public async Task<IActionResult> Dashboard()
         {
-            return View();
+            // Get all shipments ordered by creation date (newest first)
+            var shipments = await _shipmentService.GetAllShipmentsAsync();
+            
+            return View(shipments);
         }
 
         // Add these new methods:

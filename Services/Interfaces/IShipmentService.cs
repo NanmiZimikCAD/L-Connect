@@ -49,5 +49,7 @@ namespace L_Connect.Services.Interfaces
         // <param name="updatedByAdminId">ID of the admin making the update</param>
         // <returns>True if the update succeeded, false if the shipment wasn't found</returns>
         Task<bool> UpdateShipmentStatusAsync(int shipmentId, string status, string location, string notes, int updatedByAdminId);
+
+        Task<List<Shipment>> GetAllShipmentsAsync();
     }
 }
