@@ -85,6 +85,7 @@ namespace L_Connect.Data
                     DestinationAddress = "456 Receiver Ave, Destination City, DC 67890",
                     CurrentStatus = "In Transit",
                     CurrentLocation = "Transit Hub, Midway City",
+                    ServiceType = "Standard",
                     CreatedAt = DateTime.UtcNow.AddDays(-3),
                     EstimatedDeliveryDate = DateTime.UtcNow.AddDays(2)
                 },
@@ -97,6 +98,7 @@ namespace L_Connect.Data
                     DestinationAddress = "101 Receiver Dr, Destination Town, DT 78901",
                     CurrentStatus = "Delivered",
                     CurrentLocation = "Destination Town",
+                    ServiceType = "Standard",
                     CreatedAt = DateTime.UtcNow.AddDays(-5),
                     EstimatedDeliveryDate = DateTime.UtcNow.AddDays(-1)
                 },
@@ -109,6 +111,7 @@ namespace L_Connect.Data
                     DestinationAddress = "777 Client St, Client City, CC 89012",
                     CurrentStatus = "Processing",
                     CurrentLocation = "Origin Warehouse",
+                    ServiceType = "Standard",
                     CreatedAt = DateTime.UtcNow.AddDays(-1),
                     EstimatedDeliveryDate = DateTime.UtcNow.AddDays(4)
                 }

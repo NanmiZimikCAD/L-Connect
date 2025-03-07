@@ -6,9 +6,6 @@ using L_Connect.Data;
 using L_Connect.Models.Domain;
 using L_Connect.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace L_Connect.Services.Implementations
@@ -16,45 +13,31 @@ namespace L_Connect.Services.Implementations
     // Service implementation for shipment-related operations
     public class ShipmentService: IShipmentService
     {
-        // Declares a private field to store a reference to the database context
-        // readonly means it can only be assigned once (in the constructor)
-        // This field will be used throughout the service to access the database
-        // dependency injection will be used to provide the database context - The service doesn't create its own database context; it receives one from outside
         private readonly ApplicationDbContext _context;
-        //constructor
+        
         public ShipmentService(ApplicationDbContext context)
         {
-            //Assigns the provided context to the private field for later use
-            //stores the database context so it can be used in all the service methods
             _context = context;
         }
-        // Retrieves a shipment by its tracking number
+        
+        // Existing methods remain unchanged
         public async Task<Shipment> GetShipmentByTrackingNumberAsync(string trackingNumber)
         {
-            //performs an asynchronous database query to find a shipment
-            //_context.Shipments - Accesses the Shipments DbSet in your database context
-            //.FirstOrDefaultAsync(...) - Executes an asynchronous query that:
-            // Returns the first matching record if found
-            // Returns null if no matching record exists
             if (string.IsNullOrEmpty(trackingNumber))
                 return null;
 
             return await _context.Shipments
-            // A lambda expression that defines the search condition
-            // Makes the method wait for the database query to complete before proceeding   
                 .FirstOrDefaultAsync(s => s.TrackingNumber == trackingNumber);
         }
 
         public async Task<List<ShipmentStatus>> GetShipmentsByStatusHistoryAsync(int shipmentId)
         {
-            // Return all status updates for the given shipment, ordered by date (newest first)
             return await _context.ShipmentStatuses
                 .Where(s => s.ShipmentId == shipmentId)
                 .OrderByDescending(s => s.UpdatedAt)
                 .ToListAsync();
-                }
+        }
 
-        //Retrieves all status updates for a specific shipment
         public async Task<List<ShipmentStatus>> GetShipmentStatusHistoryAsync(int shipmentId)
         {
             return await _context.ShipmentStatuses
@@ -62,7 +45,7 @@ namespace L_Connect.Services.Implementations
                 .OrderByDescending(s => s.UpdatedAt)
                 .ToListAsync();
         }
-        // Validates if a tracking number exists in the system
+        
         public async Task<bool> ValidateTrackingNumberAsync(string trackingNumber)
         {
             if (string.IsNullOrEmpty(trackingNumber))
@@ -71,13 +54,114 @@ namespace L_Connect.Services.Implementations
             return await _context.Shipments
                 .AnyAsync(s => s.TrackingNumber == trackingNumber);
         }
-        //Add the service method to fetch client shipments
+        
         public async Task<List<Shipment>> GetShipmentsByClientIdAsync(int clientId)
         {
             return await _context.Shipments
                 .Where(s => s.ClientId == clientId)
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
+        }
+
+        // UPDATED METHODS BELOW - Fixed to work with your Shipment model
+
+        public async Task<Shipment> CreateShipmentAsync(Shipment shipment)
+        {
+            // Generate a unique tracking number
+            shipment.TrackingNumber = GenerateTrackingNumber();
+            
+            // Set creation date
+            shipment.CreatedAt = DateTime.UtcNow;
+            
+            // Set initial status to "Pending"
+            shipment.CurrentStatus = "Pending";
+            shipment.CurrentLocation = shipment.OriginAddress;
+            
+            // ServiceType is now directly set from the input parameter
+            // No need to calculate or derive it
+            
+            // Calculate estimated delivery date based on service type
+            int deliveryDays = 5; // Default
+            
+            if (shipment.ServiceType == "Express")
+            {
+                deliveryDays = 3;
+            }
+            else if (shipment.ServiceType == "International")
+            {
+                deliveryDays = 10;
+            }
+            
+            shipment.EstimatedDeliveryDate = DateTime.UtcNow.AddDays(deliveryDays);
+
+            // Add to database
+            _context.Shipments.Add(shipment);
+            await _context.SaveChangesAsync();
+
+            // Create initial status record
+            var initialStatus = new ShipmentStatus
+            {
+                ShipmentId = shipment.ShipmentId,
+                Status = "Pending",
+                Location = shipment.OriginAddress,
+                Notes = "Shipment created and awaiting processing",
+                UpdatedAt = DateTime.UtcNow,
+                UpdatedByAdminId = shipment.CreatedByAdminId
+            };
+
+            _context.ShipmentStatuses.Add(initialStatus);
+            await _context.SaveChangesAsync();
+
+            return shipment;
+        }
+
+        public async Task<Shipment> GetShipmentByIdAsync(int id)
+        {
+            // Get shipment by ID
+            var shipment = await _context.Shipments
+                .FirstOrDefaultAsync(s => s.ShipmentId == id); // Note: using ShipmentId
+
+            return shipment;
+        }
+
+        public async Task<bool> UpdateShipmentStatusAsync(int shipmentId, string status, string location, string notes, int updatedByAdminId)
+        {
+            // Find the shipment
+            var shipment = await _context.Shipments.FindAsync(shipmentId);
+            if (shipment == null)
+            {
+                return false;
+            }
+
+            // Update the shipment
+            shipment.CurrentStatus = status;
+            shipment.CurrentLocation = location;
+
+            // Create status history record
+            var statusUpdate = new ShipmentStatus
+            {
+                ShipmentId = shipmentId,
+                Status = status,
+                Location = location,
+                Notes = notes,
+                UpdatedAt = DateTime.UtcNow,
+                UpdatedByAdminId = updatedByAdminId
+            };
+
+            _context.ShipmentStatuses.Add(statusUpdate);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        private string GenerateTrackingNumber()
+        {
+            // Format: LC-YYYYMMDD-XXXX where XXXX is a random 4-digit number
+            var dateComponent = DateTime.UtcNow.ToString("yyyyMMdd");
+            var random = new Random();
+            var randomComponent = random.Next(1000, 9999).ToString();
+            
+            return $"LC-{dateComponent}-{randomComponent}";
         }
     }
 }
