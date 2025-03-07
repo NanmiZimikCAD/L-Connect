@@ -56,6 +56,22 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/*Yipeng CSS*/
+.hero-section {
+  background-color: #343a40; /* fallback color */
+  min-height: 300px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card-text strong {
+  color: #495057;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 767.98px) {
   .timeline-date {
