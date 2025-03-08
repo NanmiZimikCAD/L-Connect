@@ -1,0 +1,97 @@
+
+<div class="bg-primary">
+    <div class="container py-5 ">
+        <div class="row justify-content-center">
+            <div class="col-sm-8">
+                <h2 class="text-center mb-4 text-white">Frequently Asked Questions</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 pt-2">
+            <!-- FAQ Item 1 -->
+            <div class="card mb-4">
+                <div
+                    class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">How do I track my package?</h5>
+                    <button class="btn btn-link p-0" data-bs-toggle="collapse"
+                        data-bs-target="#answer1" aria-expanded="false"
+                        aria-controls="answer1">
+                        <i class="bi bi-chevron-down" id="icon1"></i>
+                    </button>
+                </div>
+                <div id="answer1" class="collapse show">
+                    <div class="card-body">
+                        You can track your package using our tracking page by
+                        entering your tracking number.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="card mb-4">
+                <div
+                    class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">What are the shipping rates?</h5>
+                    <button class="btn btn-link p-0" data-bs-toggle="collapse"
+                        data-bs-target="#answer2" aria-expanded="false"
+                        aria-controls="answer2">
+                        <i class="bi bi-chevron-down" id="icon2"></i>
+                    </button>
+                </div>
+                <div id="answer2" class="collapse">
+                    <div class="card-body">
+                        Shipping rates vary depending on the package weight and
+                        destination.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="card mb-4">
+                <div
+                    class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">How long does delivery take?</h5>
+                    <button class="btn btn-link p-0" data-bs-toggle="collapse"
+                        data-bs-target="#answer3" aria-expanded="false"
+                        aria-controls="answer3">
+                        <i class="bi bi-chevron-down" id="icon3"></i>
+                    </button>
+                </div>
+                <div id="answer3" class="collapse">
+                    <div class="card-body">
+                        Standard delivery takes 3-5 business days, while express
+                        delivery takes 1-2 days.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons for chevron -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    rel="stylesheet">
+
+<script>
+    // Toggle the chevron icon
+    document.querySelectorAll('.btn-link').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var targetId = button.getAttribute('data-bs-target');
+            var icon = button.querySelector('i');
+            
+            // Toggle chevron up and down
+            if (document.querySelector(targetId).classList.contains('show')) {
+                icon.classList.remove('bi-chevron-up');
+                icon.classList.add('bi-chevron-down');
+            } else {
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            }
+        });
+    });
+</script>

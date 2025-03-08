@@ -8,6 +8,11 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
+    //FAQ page
+
+
+
+
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
@@ -18,6 +23,18 @@ public class HomeController : Controller
         return View();
     }
 
+    //faq page
+    public IActionResult FAQ()
+    {
+        return View();
+    }
+
+    //support page
+    public IActionResult Support()
+    {
+        return View();
+    }
+     
     public IActionResult Privacy()
     {
         return View();

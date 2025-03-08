@@ -1,0 +1,72 @@
+<div class="bg-primary">
+    <div class="container py-5 ">
+        <div class="row justify-content-center">
+            <div class="col-sm-8">
+                <h2 class="text-center mb-4 text-white">Support Contact </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+
+    <!-- Bootstrap Tabs -->
+    <ul class="nav nav-tabs justify-content-center" id="supportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab">
+                Contact Us
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="terms-tab" data-bs-toggle="tab" data-bs-target="#terms" type="button" role="tab">
+                Terms & Conditions
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4" id="supportTabsContent">
+        <!-- Contact Us Tab -->
+        <div class="tab-pane fade show active" id="contact" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Get in Touch</h4>
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Details -->
+            <div class="text-center mt-4">
+                <p class="fw-bold">Need more help?</p>
+                <p>Email: <a href="mailto:support@example.com" class="text-primary">support@example.com</a></p>
+                <p>Call: <a href="tel:+1234567890" class="text-primary">+1 234-567-890</a></p>
+            </div>
+        </div>
+
+        <!-- Terms & Conditions Tab -->
+        <div class="tab-pane fade" id="terms" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Terms & Conditions</h4>
+                    <p><strong>1. Introduction:</strong> By using our services, you agree to our terms.</p>
+                    <p><strong>2. Privacy Policy:</strong> Your data is securely managed.</p>
+                    <p><strong>3. Service Limitations:</strong> We strive for accuracy but do not guarantee it.</p>
+                    <p><strong>4. Contact:</strong> For legal inquiries, please reach out to support.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
