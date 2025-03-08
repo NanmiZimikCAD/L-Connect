@@ -1,0 +1,85 @@
+@model L_Connect.Models.ViewModels.Quote.QuoteRequestViewModel
+
+<div class="container py-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="mb-4 text-primary">Request a Quote</h2>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </div>
+            }
+
+            <form asp-action="Create" method="post">
+                <!-- Customer Info -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="CustomerName" class="form-label fw-bold">Customer Name</label>
+                        <input asp-for="CustomerName" class="form-control" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-bold">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Source and Destination -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Source" class="form-label fw-bold">Source</label>
+                        <select asp-for="Source" class="form-select">
+                            <option value="">Select Source</option>
+                            @foreach (var country in Model.Countries)
+                            {
+                                <option value="@country">@country</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Source" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Destination" class="form-label fw-bold">Destination</label>
+                        <select asp-for="Destination" class="form-select">
+                            <option value="">Select Destination</option>
+                            @foreach (var country in Model.Countries)
+                            {
+                                <option value="@country">@country</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Destination" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Weight -->
+              <div class="row mb-3">
+    <div class="col-md-6">
+        <label asp-for="Weight" class="form-label fw-bold">Weight (kg)</label>
+        <input asp-for="Weight" type="number" step="0.01" class="form-control" placeholder="Enter weight" />
+        <span asp-validation-for="Weight" class="text-danger"></span>
+    </div>
+</div>
+
+
+                <!-- Additional Details -->
+                <div class="mb-3">
+                    <label asp-for="AdditionalDetails" class="form-label fw-bold">Additional Details</label>
+                    <textarea asp-for="AdditionalDetails" class="form-control"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-2">
+                        Get Quote
+                    </button>
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
