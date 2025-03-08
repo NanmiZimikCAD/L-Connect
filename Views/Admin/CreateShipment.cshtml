@@ -1,0 +1,77 @@
+@model L_Connect.Models.ViewModels.Shipments.CreateShipmentViewModel
+
+@{
+    ViewData["Title"] = "Create New Shipment";
+    Layout = "_AdminLayout";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Create New Shipment</h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="CreateShipment" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="mb-3">
+                    <label asp-for="ClientEmail" class="form-label"></label>
+                    <input asp-for="ClientEmail" class="form-control" />
+                    <span asp-validation-for="ClientEmail" class="text-danger"></span>
+                    <small class="text-muted">Enter client's email address. If they're not registered, they'll be able to claim this shipment later.</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="OriginAddress" class="form-label"></label>
+                    <textarea asp-for="OriginAddress" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="OriginAddress" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="DestinationAddress" class="form-label"></label>
+                    <textarea asp-for="DestinationAddress" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="DestinationAddress" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Weight" class="form-label"></label>
+                    <input asp-for="Weight" class="form-control" type="number" step="0.1" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="ServiceType" class="form-label"></label>
+                    <select asp-for="ServiceType" class="form-select">
+                        <option value="">Select Service Type</option>
+                        @foreach (var serviceType in ViewBag.ServiceTypes)
+                        {
+                            <option value="@serviceType">@serviceType</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ServiceType" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="SpecialInstructions" class="form-label"></label>
+                    <textarea asp-for="SpecialInstructions" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="SpecialInstructions" class="text-danger"></span>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Dashboard" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create Shipment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

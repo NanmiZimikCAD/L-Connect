@@ -56,5 +56,10 @@ namespace L_Connect.Models.Domain
         // Navigation property for documents
         // Helper method to generate tracking number
         // Helper method to update current status
+
+        // 
+        [Required]
+        [StringLength(50)]
+        public string ServiceType { get; set; }
     }
 }

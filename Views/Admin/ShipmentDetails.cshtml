@@ -1,0 +1,114 @@
+<!-- Views/Admin/ShipmentDetails.cshtml -->
+@model L_Connect.Models.ViewModels.Shipments.ShipmentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Shipment Details";
+    Layout = "_AdminLayout";
+}
+
+<div class="container mt-4">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Shipment Details</h2>
+            <a asp-action="Dashboard" class="btn btn-outline-light">Back to Dashboard</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Shipment Information</h3>
+                    <table class="table table-borderless">
+                        <tr>
+                            <th class="text-end">Tracking Number:</th>
+                            <td><strong>@Model.Shipment.TrackingNumber</strong></td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Client:</th>
+                            <td>@(Model.Shipment.Client?.Email ?? "No client email associated")</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Status:</th>
+                            <td><span class="badge bg-info">@Model.Shipment.CurrentStatus</span></td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Service Type:</th>
+                            <td>@Model.ServiceType</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Weight:</th>
+                            <td>@Model.Shipment.Weight kg</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Cost:</th>
+                            <td>$@Model.Shipment.FinalCost</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Created On:</th>
+                            <td>@Model.Shipment.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Est. Delivery:</th>
+                            <td>@(Model.Shipment.EstimatedDeliveryDate?.ToString("dd MMM yyyy") ?? "Not specified")</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h3>Addresses</h3>
+                    <div class="mb-3">
+                        <h5>Origin:</h5>
+                        <p class="bg-light p-2 rounded">@Model.Shipment.OriginAddress</p>
+                    </div>
+                    <div>
+                        <h5>Destination:</h5>
+                        <p class="bg-light p-2 rounded">@Model.Shipment.DestinationAddress</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr />
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h3>Shipment Status History</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                    <th>Location</th>
+                                    <th>Notes</th>
+                                    <th class="text-end">Service Type:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var status in Model.StatusHistory.OrderByDescending(s => s.UpdatedAt))
+                                {
+                                    <tr>
+                                        <td>@status.UpdatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                        <td>@status.Status</td>
+                                        <td>@status.Location</td>
+                                        <td>@status.Notes</td>
+                                        <td>@Model.Shipment.ServiceType</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a asp-action="UpdateStatus" asp-route-id="@Model.Shipment.ShipmentId" class="btn btn-primary">Update Status</a>
+                <a asp-action="UploadDocument" asp-route-id="@Model.Shipment.ShipmentId" class="btn btn-secondary">Upload Document</a>
+            </div>
+        </div>
+    </div>
+</div>

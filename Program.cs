@@ -18,6 +18,9 @@ builder.Services.AddControllersWithViews();
 
 // Register application services
 builder.Services.AddScoped<IShipmentService, ShipmentService>();
+// Register services for dependency injection
+builder.Services.AddScoped<L_Connect.Services.Interfaces.IShipmentService, L_Connect.Services.Implementations.ShipmentService>();
+builder.Services.AddScoped(typeof(L_Connect.Services.Interfaces.IUserService), typeof(L_Connect.Services.Implementations.UserService));
 
 // Add Cookie Authentication
 builder.Services.AddAuthentication(options =>

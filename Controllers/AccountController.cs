@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;  // Added this for IPasswordHasher
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 //AccountController is responsible for handling all user authentication and account management functionalities
 
@@ -69,6 +70,30 @@ namespace L_Connect.Controllers
                     {
                         _logger.LogInformation($"User found: {user.Email}, Role: {user.Role.RoleName}");
 
+                        // Create claims for the authenticated user
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, user.Email),
+                            new Claim(ClaimTypes.Role, user.Role.RoleName),
+                            new Claim("UserId", user.UserId.ToString())
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var authProperties = new AuthenticationProperties
+                        {
+                            // Configure as needed (e.g., IsPersistent for "Remember me")
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(24)
+                        };
+
+                        // Sign in the user
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            authProperties);
+
                         // Redirect based on role
                         if (user.Role.RoleName.ToUpper() == "ADMIN")
                         {
@@ -81,6 +106,7 @@ namespace L_Connect.Controllers
                     }
                 }
 
+                // Login failed
                 _logger.LogWarning($"Login failed for email: {model.Email}");
                 ModelState.AddModelError("", "Invalid email or password");
                 return View(model);

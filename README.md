@@ -30,12 +30,22 @@ Most logistics software is designed for large enterprises, leaving smaller compa
 ```
 L-Connect/
 ├── Controllers/
+<<<<<<< HEAD
+│   ├── AccountController.cs        # Authentication & user management
+│   ├── AdminController.cs          # Admin features
+│   ├── ClientController.cs         # Client dashboard & features
+│   ├── HomeController.cs           # Public pages
+│   ├── TrackingController.cs       # Tracking functionality
+│   |── QuoteController.cs          # Quote requests
+|   └── ServicesController.cs       # Service page display
+=======
 │   ├── AccountController.cs        # Authentication & user management - created
 │   ├── AdminController.cs          # Admin features - created
 │   ├── ClientController.cs         # Client dashboard & features - created
 │   ├── HomeController.cs           # Public pages - created
 │   ├── TrackingController.cs       # Tracking functionality - created
 │   └── QuoteController.cs          # Quote requests
+>>>>>>> origin/main
 ├── Data/
 │   ├── Migrations/
 │   └── ApplicationDbContext.cs     # - created
@@ -91,6 +101,8 @@ L-Connect/
 │   │   └── Result.cshtml          # Tracking results page - created
 │   ├── Quote/
 │   │   └── Request.cshtml         # Quote form
+|   |── Services/
+|   |   └── Index.cshtml           # Services Table
 │   └── Shared/
 │       ├── _AdminLayout.cshtml    # Admin layout - created
 │       ├── _ClientLayout.cshtml   # Client layout - created

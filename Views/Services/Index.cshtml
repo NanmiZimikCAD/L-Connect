@@ -1,0 +1,44 @@
+@model List<L_Connect.Models.ViewModels.Services.ServiceViewModel>
+
+<!-- Hero Section -->
+<div class="container-fluid p-0">
+    <div class="hero-section text-white d-flex align-items-center justify-content-center" style="background: url('/images/services-bg.jpg') no-repeat center center; background-size: cover; min-height: 300px;">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold">Our Shipping Services</h1>
+            <p class="lead">Reliable, efficient, and tailored shipping solutions</p>
+        </div>
+    </div>
+</div>
+
+<!-- Services Cards -->
+<div class="container my-5">
+    <div class="row">
+        @foreach (var service in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">@service.Route</h5>
+                        <hr />
+                        <p class="card-text">
+                            <strong>Transportation & Prices:</strong><br />
+                            @foreach (var method in service.TransportationMethods)
+                            {
+                                decimal price = service.BasePrices.ContainsKey(method) ? service.BasePrices[method] : 0;
+                                <span class="badge bg-secondary me-1">@method: @price.ToString("C")</span><br />
+                            }
+                        </p>
+                        <p class="card-text">
+                            <strong>Bulk Discount:</strong> Order more than @service.BulkThreshold parcels for a @(service.BulkDiscountRate * 100)% discount per parcel.
+                        </p>
+                        <p class="card-text">
+                            <strong>Extra Charges:</strong><br />
+                            Custom Services: @service.CustomServiceCharge.ToString("C") per parcel<br />
+                            Insurance: @service.InsuranceCharge.ToString("C") per parcel
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
