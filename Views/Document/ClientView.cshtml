@@ -1,0 +1,62 @@
+<!-- Views/Document/ClientView.cshtml -->
+@model L_Connect.Models.ViewModels.Documents.DocumentListViewModel
+@{
+    ViewData["Title"] = "Shipment Documents";
+    Layout = "_ClientLayout";
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>Documents for Shipment #@Model.ShipmentTrackingNumber</h2>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Available Documents</h5>
+        </div>
+        <div class="card-body">
+            @if (!Model.Documents.Any())
+            {
+                <p class="text-center my-4">No documents available for this shipment.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Document Type</th>
+                                <th>File Name</th>
+                                <th>Size</th>
+                                <th>Upload Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var document in Model.Documents)
+                            {
+                                <tr>
+                                    <td>@document.DocumentTypeName</td>
+                                    <td>@document.FileName</td>
+                                    <td>@document.FileSizeFormatted</td>
+                                    <td>@document.UploadedDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        <a asp-action="Download" asp-route-id="@document.DocumentID" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-download me-1"></i> Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a asp-controller="Client" asp-action="Shipments" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to My Shipments
+        </a>
+    </div>
+</div>
