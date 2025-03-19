@@ -22,6 +22,118 @@ namespace L_Connect.Data.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("L_Connect.Models.Domain.Document", b =>
+                {
+                    b.Property<int>("DocumentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("DocumentID"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("DocumentTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("FileSize")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ShipmentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UploadedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UploadedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("DocumentID");
+
+                    b.HasIndex("DocumentTypeID");
+
+                    b.HasIndex("ShipmentID");
+
+                    b.HasIndex("UploadedBy");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("L_Connect.Models.Domain.DocumentType", b =>
+                {
+                    b.Property<int>("DocumentTypeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("DocumentTypeID"));
+
+                    b.Property<string>("AllowedExtensions")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("DocumentTypeID");
+
+                    b.ToTable("DocumentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            DocumentTypeID = 1,
+                            AllowedExtensions = ".pdf,.docx,.jpg,.png",
+                            Description = "Transport document for cargo shipments",
+                            TypeName = "Bill of Lading"
+                        },
+                        new
+                        {
+                            DocumentTypeID = 2,
+                            AllowedExtensions = ".pdf,.docx,.xlsx",
+                            Description = "Commercial transaction document",
+                            TypeName = "Commercial Invoice"
+                        },
+                        new
+                        {
+                            DocumentTypeID = 3,
+                            AllowedExtensions = ".pdf,.docx,.xlsx",
+                            Description = "Detailed packaging information",
+                            TypeName = "Packing List"
+                        },
+                        new
+                        {
+                            DocumentTypeID = 4,
+                            AllowedExtensions = ".pdf,.jpg,.png",
+                            Description = "Documents for customs clearance",
+                            TypeName = "Customs Declaration"
+                        },
+                        new
+                        {
+                            DocumentTypeID = 5,
+                            AllowedExtensions = ".pdf,.jpg,.png",
+                            Description = "Confirmation of delivery receipt",
+                            TypeName = "Proof of Delivery"
+                        });
+                });
+
             modelBuilder.Entity("L_Connect.Models.Domain.Role", b =>
                 {
                     b.Property<int>("RoleId")
@@ -53,14 +165,14 @@ namespace L_Connect.Data.Migrations
                         new
                         {
                             RoleId = 1,
-                            CreatedAt = new DateTime(2025, 3, 7, 15, 42, 44, 182, DateTimeKind.Utc).AddTicks(5099),
+                            CreatedAt = new DateTime(2025, 3, 17, 22, 31, 37, 280, DateTimeKind.Utc).AddTicks(1402),
                             Description = "Administrator",
                             RoleName = "ADMIN"
                         },
                         new
                         {
                             RoleId = 2,
-                            CreatedAt = new DateTime(2025, 3, 7, 15, 42, 44, 182, DateTimeKind.Utc).AddTicks(5102),
+                            CreatedAt = new DateTime(2025, 3, 17, 22, 31, 37, 280, DateTimeKind.Utc).AddTicks(1405),
                             Description = "Client User",
                             RoleName = "CLIENT"
                         });
@@ -136,11 +248,11 @@ namespace L_Connect.Data.Migrations
                         new
                         {
                             ShipmentId = 1,
-                            CreatedAt = new DateTime(2025, 3, 4, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9710),
+                            CreatedAt = new DateTime(2025, 3, 14, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7422),
                             CurrentLocation = "Transit Hub, Midway City",
                             CurrentStatus = "In Transit",
                             DestinationAddress = "456 Receiver Ave, Destination City, DC 67890",
-                            EstimatedDeliveryDate = new DateTime(2025, 3, 9, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9718),
+                            EstimatedDeliveryDate = new DateTime(2025, 3, 19, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7426),
                             FinalCost = 0m,
                             OriginAddress = "123 Sender St, Origin City, OC 12345",
                             ServiceType = "Standard",
@@ -150,11 +262,11 @@ namespace L_Connect.Data.Migrations
                         new
                         {
                             ShipmentId = 2,
-                            CreatedAt = new DateTime(2025, 3, 2, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9727),
+                            CreatedAt = new DateTime(2025, 3, 12, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7431),
                             CurrentLocation = "Destination Town",
                             CurrentStatus = "Delivered",
                             DestinationAddress = "101 Receiver Dr, Destination Town, DT 78901",
-                            EstimatedDeliveryDate = new DateTime(2025, 3, 6, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9728),
+                            EstimatedDeliveryDate = new DateTime(2025, 3, 16, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7431),
                             FinalCost = 0m,
                             OriginAddress = "789 Sender Blvd, Origin Town, OT 23456",
                             ServiceType = "Standard",
@@ -165,11 +277,11 @@ namespace L_Connect.Data.Migrations
                         {
                             ShipmentId = 3,
                             ClientId = 2,
-                            CreatedAt = new DateTime(2025, 3, 6, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9731),
+                            CreatedAt = new DateTime(2025, 3, 16, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7433),
                             CurrentLocation = "Origin Warehouse",
                             CurrentStatus = "Processing",
                             DestinationAddress = "777 Client St, Client City, CC 89012",
-                            EstimatedDeliveryDate = new DateTime(2025, 3, 11, 15, 42, 44, 379, DateTimeKind.Utc).AddTicks(9732),
+                            EstimatedDeliveryDate = new DateTime(2025, 3, 21, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7434),
                             FinalCost = 0m,
                             OriginAddress = "555 Business Rd, Corporate City, CC 34567",
                             ServiceType = "Standard",
@@ -226,7 +338,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Shipment order received and entered into system",
                             ShipmentId = 1,
                             Status = "Order Received",
-                            UpdatedAt = new DateTime(2025, 3, 4, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(147)
+                            UpdatedAt = new DateTime(2025, 3, 14, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7476)
                         },
                         new
                         {
@@ -235,7 +347,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package received at origin facility",
                             ShipmentId = 1,
                             Status = "Processing",
-                            UpdatedAt = new DateTime(2025, 3, 5, 3, 42, 44, 380, DateTimeKind.Utc).AddTicks(153)
+                            UpdatedAt = new DateTime(2025, 3, 15, 10, 31, 37, 364, DateTimeKind.Utc).AddTicks(7478)
                         },
                         new
                         {
@@ -244,7 +356,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package in transit to destination",
                             ShipmentId = 1,
                             Status = "In Transit",
-                            UpdatedAt = new DateTime(2025, 3, 6, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(156)
+                            UpdatedAt = new DateTime(2025, 3, 16, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7479)
                         },
                         new
                         {
@@ -253,7 +365,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Shipment order received",
                             ShipmentId = 2,
                             Status = "Order Received",
-                            UpdatedAt = new DateTime(2025, 3, 2, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(158)
+                            UpdatedAt = new DateTime(2025, 3, 12, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7480)
                         },
                         new
                         {
@@ -262,7 +374,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package being processed",
                             ShipmentId = 2,
                             Status = "Processing",
-                            UpdatedAt = new DateTime(2025, 3, 3, 3, 42, 44, 380, DateTimeKind.Utc).AddTicks(161)
+                            UpdatedAt = new DateTime(2025, 3, 13, 10, 31, 37, 364, DateTimeKind.Utc).AddTicks(7482)
                         },
                         new
                         {
@@ -271,7 +383,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package in transit",
                             ShipmentId = 2,
                             Status = "In Transit",
-                            UpdatedAt = new DateTime(2025, 3, 4, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(179)
+                            UpdatedAt = new DateTime(2025, 3, 14, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7483)
                         },
                         new
                         {
@@ -280,7 +392,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package out for delivery",
                             ShipmentId = 2,
                             Status = "Out for Delivery",
-                            UpdatedAt = new DateTime(2025, 3, 6, 3, 42, 44, 380, DateTimeKind.Utc).AddTicks(182)
+                            UpdatedAt = new DateTime(2025, 3, 16, 10, 31, 37, 364, DateTimeKind.Utc).AddTicks(7485)
                         },
                         new
                         {
@@ -289,7 +401,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package delivered successfully",
                             ShipmentId = 2,
                             Status = "Delivered",
-                            UpdatedAt = new DateTime(2025, 3, 6, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(184)
+                            UpdatedAt = new DateTime(2025, 3, 16, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7486)
                         },
                         new
                         {
@@ -298,7 +410,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Order received from client",
                             ShipmentId = 3,
                             Status = "Order Received",
-                            UpdatedAt = new DateTime(2025, 3, 6, 15, 42, 44, 380, DateTimeKind.Utc).AddTicks(186)
+                            UpdatedAt = new DateTime(2025, 3, 16, 22, 31, 37, 364, DateTimeKind.Utc).AddTicks(7487)
                         },
                         new
                         {
@@ -307,7 +419,7 @@ namespace L_Connect.Data.Migrations
                             Notes = "Package being prepared for shipping",
                             ShipmentId = 3,
                             Status = "Processing",
-                            UpdatedAt = new DateTime(2025, 3, 7, 9, 42, 44, 380, DateTimeKind.Utc).AddTicks(188)
+                            UpdatedAt = new DateTime(2025, 3, 17, 16, 31, 37, 364, DateTimeKind.Utc).AddTicks(7488)
                         });
                 });
 
@@ -359,22 +471,49 @@ namespace L_Connect.Data.Migrations
                         {
                             UserId = 1,
                             ContactNumber = "1234567890",
-                            CreatedAt = new DateTime(2025, 3, 7, 15, 42, 44, 182, DateTimeKind.Utc).AddTicks(5262),
+                            CreatedAt = new DateTime(2025, 3, 17, 22, 31, 37, 280, DateTimeKind.Utc).AddTicks(1509),
                             Email = "admin@test.com",
                             FullName = "Test Admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGTYy//H6mVUfhAYLJamiCHHBDSQwCSpEhu61f8y3oUfrZJGGOZvWMVV0lZfo8JbBw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIRF+5CYq8SnUi4NcpLbhZKDWiLEUp27doWYdc8ZaXdjQGopi4YJlv0hvb8bfoPQcg==",
                             RoleId = 1
                         },
                         new
                         {
                             UserId = 2,
                             ContactNumber = "0987654321",
-                            CreatedAt = new DateTime(2025, 3, 7, 15, 42, 44, 182, DateTimeKind.Utc).AddTicks(5265),
+                            CreatedAt = new DateTime(2025, 3, 17, 22, 31, 37, 280, DateTimeKind.Utc).AddTicks(1511),
                             Email = "client@test.com",
                             FullName = "Test Client",
-                            PasswordHash = "AQAAAAIAAYagAAAAEI5ZVAcYEVJ2xskbKJ9L/MxlN8dhubXsa7vT39UuvMSKX0y1wGQDX9Smq+hZud8JXg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHRnigGo1MHnHjp8CBfl/ARCBbKrkls79wfShiRMmLLnyITRcDWOyK1WveyaAvvFzg==",
                             RoleId = 2
                         });
+                });
+
+            modelBuilder.Entity("L_Connect.Models.Domain.Document", b =>
+                {
+                    b.HasOne("L_Connect.Models.Domain.DocumentType", "DocumentType")
+                        .WithMany("Documents")
+                        .HasForeignKey("DocumentTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("L_Connect.Models.Domain.Shipment", "Shipment")
+                        .WithMany("Documents")
+                        .HasForeignKey("ShipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("L_Connect.Models.Domain.User", "UploadedByUser")
+                        .WithMany()
+                        .HasForeignKey("UploadedBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentType");
+
+                    b.Navigation("Shipment");
+
+                    b.Navigation("UploadedByUser");
                 });
 
             modelBuilder.Entity("L_Connect.Models.Domain.Shipment", b =>
@@ -420,9 +559,19 @@ namespace L_Connect.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("L_Connect.Models.Domain.DocumentType", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
             modelBuilder.Entity("L_Connect.Models.Domain.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("L_Connect.Models.Domain.Shipment", b =>
+                {
+                    b.Navigation("Documents");
                 });
 #pragma warning restore 612, 618
         }
