@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;  // Added this for IPasswordHasher
 using Microsoft.AspNetCore.Authentication.Cookies;// Added this for Authentication
 using L_Connect.Services.Interfaces;
 using L_Connect.Services.Implementations;
+using L_Connect.Services;
 
 // - Database connection
 // - Authentication services
@@ -45,6 +46,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
+
+// Configure document storage options
+builder.Services.Configure<DocumentStorageOptions>(builder.Configuration.GetSection("DocumentStorage"));
+
+// Register document service
+builder.Services.AddScoped<IDocumentService, LocalFileDocumentService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

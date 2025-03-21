@@ -61,5 +61,8 @@ namespace L_Connect.Models.Domain
         [Required]
         [StringLength(50)]
         public string ServiceType { get; set; }
+
+        // Navigation property for documents
+        public ICollection<Document> Documents { get; set; }
     }
 }

@@ -106,8 +106,8 @@
             </div>
             
             <div class="mt-4">
-                <a asp-action="UpdateStatus" asp-route-id="@Model.Shipment.ShipmentId" class="btn btn-primary">Update Shipment</a>
-                <a asp-action="UploadDocument" asp-route-id="@Model.Shipment.ShipmentId" class="btn btn-secondary">Upload Document</a>
+                <a asp-action="EditShipment" asp-route-id="@Model.Shipment.ShipmentId" class="btn btn-primary">Update Shipment</a>
+                <a href="@Url.Action("Upload", "Document", new { shipmentId = @Model.Shipment.ShipmentId })" class="btn btn-secondary">Upload Document</a>
             </div>
         </div>
     </div>

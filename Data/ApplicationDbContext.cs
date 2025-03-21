@@ -23,6 +23,8 @@ namespace L_Connect.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<ShipmentStatus> ShipmentStatuses { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentType> DocumentTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -213,6 +215,56 @@ namespace L_Connect.Data
                     Location = "Origin Warehouse",
                     Notes = "Package being prepared for shipping",
                     UpdatedAt = DateTime.UtcNow.AddHours(-6)
+                }
+            );
+
+                    // Document configuration
+            modelBuilder.Entity<Document>()
+                .HasOne(d => d.Shipment)
+                .WithMany(s => s.Documents)
+                .HasForeignKey(d => d.ShipmentID);
+                
+            modelBuilder.Entity<Document>()
+                .HasOne(d => d.DocumentType)
+                .WithMany(dt => dt.Documents)
+                .HasForeignKey(d => d.DocumentTypeID);
+                
+            modelBuilder.Entity<Document>()
+                .HasOne(d => d.UploadedByUser)
+                .WithMany()
+                .HasForeignKey(d => d.UploadedBy);
+                
+            // Seed document types
+            modelBuilder.Entity<DocumentType>().HasData(
+                new DocumentType { 
+                    DocumentTypeID = 1, 
+                    TypeName = "Bill of Lading", 
+                    Description = "Transport document for cargo shipments", 
+                    AllowedExtensions = ".pdf,.docx,.jpg,.png" 
+                },
+                new DocumentType { 
+                    DocumentTypeID = 2, 
+                    TypeName = "Commercial Invoice", 
+                    Description = "Commercial transaction document", 
+                    AllowedExtensions = ".pdf,.docx,.xlsx" 
+                },
+                new DocumentType { 
+                    DocumentTypeID = 3, 
+                    TypeName = "Packing List", 
+                    Description = "Detailed packaging information", 
+                    AllowedExtensions = ".pdf,.docx,.xlsx" 
+                },
+                new DocumentType { 
+                    DocumentTypeID = 4, 
+                    TypeName = "Customs Declaration", 
+                    Description = "Documents for customs clearance", 
+                    AllowedExtensions = ".pdf,.jpg,.png" 
+                },
+                new DocumentType { 
+                    DocumentTypeID = 5, 
+                    TypeName = "Proof of Delivery", 
+                    Description = "Confirmation of delivery receipt", 
+                    AllowedExtensions = ".pdf,.jpg,.png" 
                 }
             );
         }
