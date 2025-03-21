@@ -27,7 +27,7 @@ namespace L_Connect.Controllers
         
         // GET: Document/Index/{shipmentId}
         // For admins to view documents for a shipment
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Index(int shipmentId)
         {
             var shipment = await _shipmentService.GetShipmentByIdAsync(shipmentId);
@@ -58,7 +58,7 @@ namespace L_Connect.Controllers
         
         // GET: Document/ClientView/{shipmentId}
         // For clients to view documents for their shipment
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "CLIENT")]
         public async Task<IActionResult> ClientView(int shipmentId)
         {
             // Get current user ID
@@ -93,7 +93,7 @@ namespace L_Connect.Controllers
         
         // GET: Document/Upload/{shipmentId}
         // Form for uploading a document (admin only)
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> Upload(int shipmentId)
         {
             var shipment = await _shipmentService.GetShipmentByIdAsync(shipmentId);
@@ -114,7 +114,7 @@ namespace L_Connect.Controllers
         // POST: Document/Upload
         // Process document upload (admin only)
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upload(UploadDocumentViewModel model)
         {
@@ -142,6 +142,14 @@ namespace L_Connect.Controllers
             }
         }
         
+        // Temporary debug code in DocumentController
+        public IActionResult TestRole()
+        {
+            var isAuthenticated = User.Identity.IsAuthenticated;
+            var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+            
+            return Content($"Authenticated: {isAuthenticated}, Roles: {string.Join(", ", roles)}");
+        }
         // GET: Document/Download/{id}
         // Download a document
         [Authorize]
@@ -169,7 +177,7 @@ namespace L_Connect.Controllers
         // POST: Document/Delete/{id}
         // Delete a document (admin only)
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "ADMIN")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, int shipmentId)
         {

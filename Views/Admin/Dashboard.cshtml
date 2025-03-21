@@ -109,7 +109,7 @@
                                                     <a href="@Url.Action("EditShipment", "Admin", new { id = shipment.ShipmentId })" class="btn btn-sm btn-outline-warning" title="Edit Shipment">
                                                         <i class="bi bi-arrow-repeat"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm btn-outline-info" title="Upload Documents">
+                                                    <a href="@Url.Action("Upload", "Document", new { shipmentId = shipment.ShipmentId })" class="btn btn-sm btn-outline-info" title="Upload Documents">
                                                         <i class="bi bi-file-earmark-arrow-up"></i>
                                                     </a>
                                                     @if (shipment.CurrentStatus == "Pending" || shipment.CurrentStatus == "Cancelled")
