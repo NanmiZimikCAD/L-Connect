@@ -16,7 +16,7 @@
                     <form asp-action="Upload" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         
-                        <input type="hidden" asp-for="ShipmentID" />
+                       <input type="hidden" asp-for="ShipmentID" value="@Model.ShipmentID" />
                         
                         <div class="mb-3">
                             <label asp-for="DocumentTypeID" class="form-label">Document Type</label>

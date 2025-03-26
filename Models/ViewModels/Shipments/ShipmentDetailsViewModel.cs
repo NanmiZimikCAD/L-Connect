@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using L_Connect.Models.Domain;
+using L_Connect.Models.ViewModels.Documents;
 
 namespace L_Connect.Models.ViewModels.Shipments
 {
@@ -27,5 +28,8 @@ namespace L_Connect.Models.ViewModels.Shipments
                     return "Standard";
             }
         }
+
+        // Add this new property
+        public IEnumerable<DocumentViewModel> Documents { get; set; }
     }
 }
