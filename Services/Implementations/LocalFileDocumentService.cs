@@ -18,11 +18,12 @@ namespace L_Connect.Services.Implementations
 
         public LocalFileDocumentService(
             ApplicationDbContext context,
-            IOptions<DocumentStorageOptions> options)
+            IConfiguration configuration)
         {
             _context = context;
-            _basePath = options.Value.LocalPath;
-            _maxFileSize = options.Value.MaxFileSize;
+            // _basePath = options.Value.LocalPath;
+            // _maxFileSize = options.Value.MaxFileSize;
+            _basePath = configuration["DocumentStorage:LocalPath"] ?? "C:\\xampp\\document_storage";
             
             // Ensure base storage directory exists
             if (!Directory.Exists(_basePath))
@@ -36,82 +37,83 @@ namespace L_Connect.Services.Implementations
 
         public async Task<int> UploadDocumentAsync(IFormFile file, int shipmentId, int documentTypeId, int uploadedBy)
         {
-            // Validate shipment exists
-            var shipment = await _context.Shipments.FindAsync(shipmentId);
-            if (shipment == null)
-                throw new ArgumentException("Invalid shipment ID");
-                
-            // Validate document type
-            var documentType = await _context.DocumentTypes.FindAsync(documentTypeId);
-            if (documentType == null)
-                throw new ArgumentException("Invalid document type");
-                
-            // Validate file size
-            if (file.Length > _maxFileSize)
-                throw new ArgumentException($"File size exceeds the limit of {_maxFileSize / 1024 / 1024}MB");
-                
-            // Validate file extension
-            string fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var allowedExtensions = documentType.AllowedExtensions?.Split(',') ?? new string[0];
+            Console.WriteLine("LocalFileDocumentService.UploadDocumentAsync called");
+            Console.WriteLine($"File info: Name={file.FileName}, Size={file.Length}");
+            Console.WriteLine($"Settings: BasePath={_basePath}");
             
-            if (allowedExtensions.Length > 0 && !allowedExtensions.Contains(fileExtension))
-                throw new ArgumentException($"File type not allowed. Allowed types: {documentType.AllowedExtensions}");
+            // Create a simple directory structure
+            string documentsFolder = Path.Combine(_basePath, "documents");
+            Console.WriteLine($"Documents folder: {documentsFolder}");
             
-            // Create storage directories
-            string shipmentFolder = Path.Combine(_basePath, shipmentId.ToString());
-            string typeFolder = Path.Combine(shipmentFolder, documentType.TypeName.ToLower().Replace(" ", "_"));
-            
-            if (!Directory.Exists(shipmentFolder))
-                Directory.CreateDirectory(shipmentFolder);
-            if (!Directory.Exists(typeFolder))
-                Directory.CreateDirectory(typeFolder);
+            try {
+                Directory.CreateDirectory(documentsFolder);
+                Console.WriteLine("Documents directory created/verified");
                 
-            // Generate a unique filename
-            string uniqueFileName = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}_{Guid.NewGuid().ToString()}{fileExtension}";
-            string filePath = Path.Combine(typeFolder, uniqueFileName);
-            
-            // Save the file
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
+                // Create a unique filename
+                string uniqueFileName = $"{DateTime.Now.Ticks}_{file.FileName}";
+                string filePath = Path.Combine(documentsFolder, uniqueFileName);
+                Console.WriteLine($"Target file path: {filePath}");
+                
+                // Save the file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    Console.WriteLine("Copying file...");
+                    await file.CopyToAsync(stream);
+                    Console.WriteLine("File copied successfully");
+                }
+                
+                // Save metadata to database
+                Console.WriteLine("Creating document record in database");
+                var document = new Document
+                {
+                    ShipmentID = shipmentId,
+                    DocumentTypeID = documentTypeId,
+                    FileName = uniqueFileName,
+                    OriginalFileName = file.FileName,
+                    ContentType = file.ContentType,
+                    FileSize = (int)file.Length,
+                    FilePath = filePath,
+                    UploadedBy = uploadedBy,
+                    UploadedDate = DateTime.UtcNow
+                };
+                
+                _context.Documents.Add(document);
+                await _context.SaveChangesAsync();
+                
+                Console.WriteLine($"Document saved with ID: {document.DocumentID}");
+                return document.DocumentID;
             }
-            
-            // Create document record in database
-            var document = new Document
-            {
-                ShipmentID = shipmentId,
-                DocumentTypeID = documentTypeId,
-                FileName = uniqueFileName,
-                OriginalFileName = file.FileName,
-                ContentType = file.ContentType,
-                FileSize = (int)file.Length,
-                FilePath = filePath,
-                UploadedBy = uploadedBy,
-                UploadedDate = DateTime.UtcNow
-            };
-            
-            _context.Documents.Add(document);
-            await _context.SaveChangesAsync();
-            
-            return document.DocumentID;
+            catch (Exception ex) {
+                Console.WriteLine($"ERROR in document service: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw; // Rethrow to let the controller handle it
+            }
         }
 
         public async Task<Document> GetDocumentAsync(int documentId)
         {
-            return await _context.Documents
-                .Include(d => d.DocumentType)
-                .Include(d => d.UploadedByUser)
-                .FirstOrDefaultAsync(d => d.DocumentID == documentId);
+            // return await _context.Documents
+            //     .Include(d => d.DocumentType)
+            //     .Include(d => d.UploadedByUser)
+            //     .FirstOrDefaultAsync(d => d.DocumentID == documentId);
+            return await _context.Documents.FindAsync(documentId);
         }
 
         public async Task<IEnumerable<Document>> GetDocumentsByShipmentAsync(int shipmentId)
         {
+            // return await _context.Documents
+            //     .Where(d => d.ShipmentID == shipmentId)
+            //     .Include(d => d.DocumentType)
+            //     .Include(d => d.UploadedByUser)
+            //     .OrderByDescending(d => d.UploadedDate)
+            //     .ToListAsync();
+            //return await _context.Documents.Where(d => d.ShipmentID == shipmentId).ToListAsync();
             return await _context.Documents
-                .Where(d => d.ShipmentID == shipmentId)
-                .Include(d => d.DocumentType)
-                .Include(d => d.UploadedByUser)
-                .OrderByDescending(d => d.UploadedDate)
-                .ToListAsync();
+            .Where(d => d.ShipmentID == shipmentId)
+            .Include(d => d.DocumentType)  // Include related DocumentType
+            .Include(d => d.UploadedByUser)  // Include related User
+            .OrderByDescending(d => d.UploadedDate)
+            .ToListAsync();
         }
 
         public async Task<(byte[] FileContents, string ContentType, string FileName)> DownloadDocumentAsync(int documentId)
@@ -120,8 +122,8 @@ namespace L_Connect.Services.Implementations
             if (document == null)
                 throw new FileNotFoundException("Document not found");
                 
-            if (!File.Exists(document.FilePath))
-                throw new FileNotFoundException("Document file not found");
+            // if (!File.Exists(document.FilePath))
+            //     throw new FileNotFoundException("Document file not found");
                 
             byte[] fileBytes = await File.ReadAllBytesAsync(document.FilePath);
             
@@ -134,19 +136,19 @@ namespace L_Connect.Services.Implementations
             if (document == null)
                 return false;
                 
-            // Only allow deletion by admin or the user who uploaded it
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-                return false;
+            // // Only allow deletion by admin or the user who uploaded it
+            // var user = await _context.Users.FindAsync(userId);
+            // if (user == null)
+            //     return false;
 
-            // Get admin role ID
-            int adminRoleId = await _context.Roles
-                .Where(r => r.RoleName == "Admin")
-                .Select(r => r.RoleId)
-                .FirstOrDefaultAsync();
+            // // Get admin role ID
+            // int adminRoleId = await _context.Roles
+            //     .Where(r => r.RoleName == "Admin")
+            //     .Select(r => r.RoleId)
+            //     .FirstOrDefaultAsync();
                 
-            if (user.RoleId != adminRoleId && document.UploadedBy != userId)
-                return false;
+            // if (user.RoleId != adminRoleId && document.UploadedBy != userId)
+            //     return false;
                 
             // Delete the physical file
             if (File.Exists(document.FilePath))
@@ -163,39 +165,40 @@ namespace L_Connect.Services.Implementations
 
         public async Task<bool> UserCanAccessDocument(int documentId, int userId)
         {
-            var document = await _context.Documents
-                .Include(d => d.Shipment)
-                .FirstOrDefaultAsync(d => d.DocumentID == documentId);
+            // var document = await _context.Documents
+            //     .Include(d => d.Shipment)
+            //     .FirstOrDefaultAsync(d => d.DocumentID == documentId);
                 
-            if (document == null)
-                return false;
+            // if (document == null)
+            //     return false;
                 
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-                return false;
+            // var user = await _context.Users.FindAsync(userId);
+            // if (user == null)
+            //     return false;
                 
-            // Get role IDs
-            int adminRoleId = await _context.Roles
-                .Where(r => r.RoleName == "Admin")
-                .Select(r => r.RoleId)
-                .FirstOrDefaultAsync();
+            // // Get role IDs
+            // int adminRoleId = await _context.Roles
+            //     .Where(r => r.RoleName == "Admin")
+            //     .Select(r => r.RoleId)
+            //     .FirstOrDefaultAsync();
                 
-            int clientRoleId = await _context.Roles
-                .Where(r => r.RoleName == "Client")
-                .Select(r => r.RoleId)
-                .FirstOrDefaultAsync();
+            // int clientRoleId = await _context.Roles
+            //     .Where(r => r.RoleName == "Client")
+            //     .Select(r => r.RoleId)
+            //     .FirstOrDefaultAsync();
                 
-            // Admins can access all documents
-            if (user.RoleId == adminRoleId)
-                return true;
+            // // Admins can access all documents
+            // if (user.RoleId == adminRoleId)
+            //     return true;
                 
-            // Clients can only access documents for their shipments
-            if (user.RoleId == clientRoleId)
-            {
-                return document.Shipment.ClientId == userId;
-            }
+            // // Clients can only access documents for their shipments
+            // if (user.RoleId == clientRoleId)
+            // {
+            //     return document.Shipment.ClientId == userId;
+            // }
             
-            return false;
+            //return false;
+            return true;
         }
     }
 }

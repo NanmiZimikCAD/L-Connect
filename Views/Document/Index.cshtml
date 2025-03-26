@@ -57,11 +57,11 @@
                                     <td>@document.UploadedDate.ToString("MMM dd, yyyy HH:mm")</td>
                                     <td>
                                         <a asp-action="Download" asp-route-id="@document.DocumentID" class="btn btn-sm btn-outline-primary" title="Download">
-                                            <i class="fas fa-download"></i>
+                                            <i class="bi bi-download"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
                                                 data-bs-target="#deleteModal" data-document-id="@document.DocumentID" title="Delete">
-                                            <i class="fas fa-trash"></i>
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -74,8 +74,8 @@
     </div>
     
     <div class="mt-3">
-        <a asp-controller="Admin" asp-action="Shipments" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Back to Shipments
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
         </a>
     </div>
 </div>

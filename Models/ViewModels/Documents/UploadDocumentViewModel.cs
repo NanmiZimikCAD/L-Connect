@@ -19,6 +19,6 @@ namespace L_Connect.Models.ViewModels.Documents
         [Display(Name = "File")]
         public IFormFile File { get; set; }
         
-        public IEnumerable<DocumentType> AvailableDocumentTypes { get; set; }
+        public IEnumerable<DocumentType>? AvailableDocumentTypes { get; set; }
     }
 }

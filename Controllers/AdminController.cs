@@ -7,6 +7,8 @@ using L_Connect.Models.ViewModels.Shipments;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using L_Connect.Models.Domain;
+using L_Connect.Models.ViewModels.Documents;
+using L_Connect.Models;
 
 namespace L_Connect.Controllers
 {
@@ -14,11 +16,14 @@ namespace L_Connect.Controllers
     {
         private readonly IShipmentService _shipmentService;
         private readonly IUserService _userService;
+        //inject document service
+        private readonly IDocumentService _documentService;
 
-        public AdminController(IShipmentService shipmentService, IUserService userService)
+        public AdminController(IShipmentService shipmentService, IUserService userService, IDocumentService documentService)
         {
             _shipmentService = shipmentService;
             _userService = userService;
+            _documentService = documentService;
         }
 
         // GET: Admin/Dashboard
@@ -99,12 +104,27 @@ namespace L_Connect.Controllers
 
             // Get status history separately
             var statusHistory = await _shipmentService.GetShipmentStatusHistoryAsync(id);
+
+            // Get documents for this shipment
+            var documents = await _documentService.GetDocumentsByShipmentAsync(id);
             
             // Use a view model to combine shipment and status history
             var viewModel = new ShipmentDetailsViewModel
             {
                 Shipment = shipment,
-                StatusHistory = statusHistory
+                StatusHistory = await _shipmentService.GetShipmentStatusHistoryAsync(id),
+                // Add documents to the view model
+                Documents = documents.Select(d => new DocumentViewModel
+                {
+                    DocumentID = d.DocumentID,
+                    FileName = d.OriginalFileName,
+                    DocumentTypeName = d.DocumentType?.TypeName ?? "Unknown Type",
+                    ContentType = d.ContentType ?? "application/octet-stream",
+                    FileSize = d.FileSize,
+                    FileSizeFormatted = Utils.FormatFileSize(d.FileSize),
+                    UploadedByName = d.UploadedByUser?.FullName ?? "Unknown User",
+                    UploadedDate = d.UploadedDate
+                })
             };
 
             return View(viewModel);
