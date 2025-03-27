@@ -222,5 +222,48 @@ namespace L_Connect.Services.Implementations
                 return false;
             }
         }
+
+        public async Task<(List<Shipment> shipments, int totalCount)> SearchShipmentsAsync(
+            string trackingNumber = null,
+            string clientName = null,
+            string service = null,
+            string status = null,
+            int page = 1,
+            int pageSize = 10)
+        {
+            var query = _context.Shipments.AsQueryable();
+            
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(trackingNumber))
+                query = query.Where(s => s.TrackingNumber.Contains(trackingNumber));
+                
+            if (!string.IsNullOrWhiteSpace(clientName))
+            {
+                // Assuming Client is a navigation property or there's a ClientID property
+                // and we have a Users table to join with
+                query = query.Where(s => s.ClientId != null && 
+                    _context.Users.Any(u => u.UserId == s.ClientId && 
+                        (u.FullName.Contains(clientName) || u.Email.Contains(clientName))));
+            }
+                
+            // Adjust based on your actual property names
+            if (!string.IsNullOrWhiteSpace(service))
+                query = query.Where(s => s.ServiceType == service); // Assuming ServiceType property
+                
+            if (!string.IsNullOrWhiteSpace(status))
+                query = query.Where(s => s.CurrentStatus == status); // Assuming CurrentStatus property
+                
+            // Get total count for pagination
+            var totalCount = await query.CountAsync();
+            
+            // Apply pagination
+            var shipments = await query
+                .OrderByDescending(s => s.CreatedAt) // Assuming CreatedDate property
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+                
+            return (shipments, totalCount);
+        }
     }
 }

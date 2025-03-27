@@ -9,28 +9,107 @@ using System.Security.Claims;
 using L_Connect.Models.Domain;
 using L_Connect.Models.ViewModels.Documents;
 using L_Connect.Models;
+using L_Connect.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace L_Connect.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IShipmentService _shipmentService;
+        private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
         //inject document service
         private readonly IDocumentService _documentService;
 
-        public AdminController(IShipmentService shipmentService, IUserService userService, IDocumentService documentService)
+        public AdminController(IShipmentService shipmentService, ApplicationDbContext context)
         {
             _shipmentService = shipmentService;
-            _userService = userService;
-            _documentService = documentService;
+            _context = context;
         }
 
         // GET: Admin/Dashboard
-        public async Task<IActionResult> Dashboard()
+        // public async Task<IActionResult> Dashboard()
+        // {
+        //     var shipments = await _shipmentService.GetAllShipmentsAsync();
+        //     return View(shipments);
+        // }
+
+        // GET: Admin/Dashboard
+        public async Task<IActionResult> Dashboard(ShipmentSearchViewModel model)
         {
-            var shipments = await _shipmentService.GetAllShipmentsAsync();
-            return View(shipments);
+            if (model == null)
+                model = new ShipmentSearchViewModel();
+            
+            // Default to page 1 if not specified
+            if (model.CurrentPage < 1)
+                model.CurrentPage = 1;
+                
+            // Get search results
+            var (shipments, totalCount) = await _shipmentService.SearchShipmentsAsync(
+                model.TrackingNumber,
+                model.ClientName,
+                model.Service,
+                model.Status,
+                model.CurrentPage,
+                model.PageSize);
+            
+            model.Shipments = shipments;
+            model.TotalItems = totalCount;
+            
+            // Get available statuses and services for dropdowns
+            ViewBag.Statuses = await _context.Shipments
+                .Select(s => s.CurrentStatus)
+                .Where(s => s != null)
+                .Distinct()
+                .ToListAsync();
+                
+            ViewBag.Services = await _context.Shipments
+                .Select(s => s.ServiceType)
+                .Where(s => s != null)
+                .Distinct()
+                .ToListAsync();
+                
+            return View(model);
+        }
+
+        // GET: Admin/Shipments - Updated to handle search
+        public async Task<IActionResult> Shipments(ShipmentSearchViewModel model)
+        {
+            if (model == null)
+                model = new ShipmentSearchViewModel();
+            
+            // Default to page 1 if not specified
+            if (model.CurrentPage < 1)
+                model.CurrentPage = 1;
+                
+            // Get search results
+            var (shipments, totalCount) = await _shipmentService.SearchShipmentsAsync(
+                model.TrackingNumber,
+                model.ClientName,
+                model.Service,
+                model.Status,
+                model.CurrentPage,
+                model.PageSize);
+            
+            model.Shipments = shipments;
+            model.TotalItems = totalCount;
+            
+            // Get available statuses and services for dropdowns
+            ViewBag.Statuses = await _context.Shipments
+                .Select(s => s.CurrentStatus)
+                .Where(s => s != null)
+                .Distinct()
+                .ToListAsync();
+                
+            ViewBag.Services = await _context.Shipments
+                .Select(s => s.ServiceType)
+                .Where(s => s != null)
+                .Distinct()
+                .ToListAsync();
+                
+            return View(model);
         }
 
         // GET: Admin/CreateShipment
@@ -105,16 +184,13 @@ namespace L_Connect.Controllers
             // Get status history separately
             var statusHistory = await _shipmentService.GetShipmentStatusHistoryAsync(id);
 
-            // Get documents for this shipment
-            var documents = await _documentService.GetDocumentsByShipmentAsync(id);
+            // Get documents for this shipment if document service exists
+            IEnumerable<DocumentViewModel> documents = new List<DocumentViewModel>();
             
-            // Use a view model to combine shipment and status history
-            var viewModel = new ShipmentDetailsViewModel
+            if (_documentService != null)
             {
-                Shipment = shipment,
-                StatusHistory = await _shipmentService.GetShipmentStatusHistoryAsync(id),
-                // Add documents to the view model
-                Documents = documents.Select(d => new DocumentViewModel
+                var docsList = await _documentService.GetDocumentsByShipmentAsync(id);
+                documents = docsList.Select(d => new DocumentViewModel
                 {
                     DocumentID = d.DocumentID,
                     FileName = d.OriginalFileName,
@@ -124,7 +200,15 @@ namespace L_Connect.Controllers
                     FileSizeFormatted = Utils.FormatFileSize(d.FileSize),
                     UploadedByName = d.UploadedByUser?.FullName ?? "Unknown User",
                     UploadedDate = d.UploadedDate
-                })
+                });
+            }
+            
+            // Use a view model to combine shipment and status history
+            var viewModel = new ShipmentDetailsViewModel
+            {
+                Shipment = shipment,
+                StatusHistory = statusHistory,
+                Documents = documents
             };
 
             return View(viewModel);

@@ -53,5 +53,13 @@ namespace L_Connect.Services.Interfaces
         Task<List<Shipment>> GetAllShipmentsAsync();
 
         Task<bool> DeleteShipmentAsync(int shipmentId);
+
+        Task<(List<Shipment> shipments, int totalCount)> SearchShipmentsAsync(
+        string trackingNumber = null,
+        string clientName = null,
+        string service = null,
+        string status = null,
+        int page = 1,
+        int pageSize = 10);
     }
 }
