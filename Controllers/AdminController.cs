@@ -23,10 +23,16 @@ namespace L_Connect.Controllers
         //inject document service
         private readonly IDocumentService _documentService;
 
-        public AdminController(IShipmentService shipmentService, ApplicationDbContext context)
+        public AdminController(
+            IShipmentService shipmentService, 
+            ApplicationDbContext context,
+            IUserService userService,
+            IDocumentService documentService)
         {
             _shipmentService = shipmentService;
             _context = context;
+            _userService = userService;
+            _documentService = documentService;
         }
 
         // GET: Admin/Dashboard
@@ -132,15 +138,22 @@ namespace L_Connect.Controllers
 
             try
             {
-                // Check if the client exists
-                var clientExists = await _userService.DoesUserExistByEmail(model.ClientEmail);
+                // Check if the client exists - with null checks
                 int? clientId = null;
-
-                if (clientExists)
+                
+                if (!string.IsNullOrEmpty(model.ClientEmail))
                 {
-                    // Get the client ID
-                    var client = await _userService.GetUserByEmail(model.ClientEmail);
-                    clientId = client.UserId;
+                    var clientExists = await _userService.DoesUserExistByEmail(model.ClientEmail);
+                    
+                    if (clientExists)
+                    {
+                        // Get the client ID
+                        var client = await _userService.GetUserByEmail(model.ClientEmail);
+                        if (client != null)
+                        {
+                            clientId = client.UserId;
+                        }
+                    }
                 }
 
                 int createdByAdminId = GetCurrentAdminId();
@@ -166,6 +179,9 @@ namespace L_Connect.Controllers
             }
             catch (Exception ex)
             {
+                // Log the full exception details
+                Console.WriteLine($"Error creating shipment: {ex.ToString()}");
+                
                 ModelState.AddModelError("", $"Error creating shipment: {ex.Message}");
                 ViewBag.ServiceTypes = new List<string> { "Standard", "Express", "International" };
                 return View(model);
