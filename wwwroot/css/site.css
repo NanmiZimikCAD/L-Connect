@@ -71,6 +71,45 @@
   color: #495057;
 }
 
+/* Hero section styles */
+.hero-section {
+  min-height: 600px;
+  position: relative;
+  background: url('/images/logistics-hero.jpg') no-repeat center bottom;
+  background-size: cover;
+}
+
+.hero-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Card hover effect */
+.transition-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.transition-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Utility classes for opacity with Bootstrap colors */
+.bg-opacity-10 {
+  opacity: 0.1;
+}
+
+.bg-white.bg-opacity-10 {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.border-opacity-25 {
+  opacity: 0.25;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 767.98px) {
