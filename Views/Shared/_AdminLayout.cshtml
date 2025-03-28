@@ -12,20 +12,14 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2a2391;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">L-Connect Admin Portal</a>
+            <a class="navbar-brand" href="@Url.Action("Dashboard", "Admin")">L-Connect Admin Portal</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">DASHBOARD</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">REPORTS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">SETTINGS</a>
+                        <a class="nav-link" href="@Url.Action("Index", "Report")">REPORTS</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
