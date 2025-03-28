@@ -75,7 +75,7 @@ namespace L_Connect.Controllers
                         {
                             new Claim(ClaimTypes.Name, user.Email),
                             new Claim(ClaimTypes.Role, user.Role.RoleName),
-                            new Claim("UserId", user.UserId.ToString())
+                            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
                         };
 
                         var claimsIdentity = new ClaimsIdentity(

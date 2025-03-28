@@ -26,21 +26,26 @@ namespace L_Connect.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
-            // Hardcode client ID for development
-            int clientId = 2; // The client ID from your seeded data
-            
-            // Get all shipments for this client
+            // Check if the user is authenticated and has the NameIdentifier claim
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                // Optionally, log the issue or redirect to login
+                return RedirectToAction("Login", "Account");
+            }
+
+            int clientId = int.Parse(userIdClaim.Value);
+
             var clientShipments = await _shipmentService.GetShipmentsByClientIdAsync(clientId);
-            
-            // Organize shipments by status
             var viewModel = new ClientDashboardViewModel
             {
                 ActiveShipments = clientShipments.Where(s => s.CurrentStatus != "Delivered").ToList(),
                 CompletedShipments = clientShipments.Where(s => s.CurrentStatus == "Delivered").ToList(),
                 PendingShipments = clientShipments.Where(s => s.CurrentStatus == "Processing").ToList()
             };
-            
+
             return View(viewModel);
         }
+
     }
 }
