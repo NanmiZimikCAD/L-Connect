@@ -21,13 +21,37 @@
 }
 
 <div class="container-fluid p-4">
+    <div class="bg-light border-bottom mb-4">
+        <div class="container-fluid py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Welcome, <span class="text-primary fw-bold">@User.Identity.Name</span>
+                    </h1>
+                    <p class="text-muted mb-0">@DateTime.Now.ToString("dddd, MMMM d, yyyy | h:mm tt")</p>
+                </div>
+                @* <div class="col-md-6 text-end">
+                    <span class="badge bg-success p-2">
+                        <i class="bi bi-check-circle me-1"></i> Online
+                    </span>
+                    <button class="btn btn-sm btn-outline-secondary ms-2" title="View Notifications">
+                        <i class="bi bi-bell"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary ms-2" title="System Settings">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                </div> *@
+            </div>
+        </div>
+    </div>
     <div class="row g-4">
         <!-- Quick Actions Row -->
         <div class="col-12">
             <div class="card bg-light border-0 shadow-sm">
                 <div class="card-body">
                     <h3 class="mb-3">Quick Actions</h3>
-                    <div class="row g-3">
+                    <div class="row justify-content-center g-3">
                         <div class="col-md-4">
                             <div class="card h-100 border-primary">
                                 <div class="card-body d-flex flex-column align-items-center text-center">
@@ -38,7 +62,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        @* <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-body d-flex flex-column align-items-center text-center">
                                     <i class="bi bi-people fs-1 text-success mb-2"></i>
@@ -47,14 +71,14 @@
                                     <a href="#" class="btn btn-success mt-auto">Manage Users</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
                         <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-body d-flex flex-column align-items-center text-center">
                                     <i class="bi bi-file-earmark-text fs-1 text-info mb-2"></i>
                                     <h4 class="card-title">Reports</h4>
                                     <p class="card-text">Generate and view reports</p>
-                                    <a href="#" class="btn btn-info mt-auto">View Reports</a>
+                                    <a href="@Url.Action("Index", "Report")" class="btn btn-info mt-auto">View Reports</a>
                                 </div>
                             </div>
                         </div>

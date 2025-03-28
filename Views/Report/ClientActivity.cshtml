@@ -1,0 +1,167 @@
+<!-- Views/Report/ClientActivity.cshtml -->
+@model L_Connect.Models.ViewModels.Reports.ClientActivityReportViewModel
+@{
+    ViewData["Title"] = "Client Activity Report";
+    Layout = "_AdminLayout";
+}
+
+<div class="container mt-4 report-container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Client Activity Report</h2>
+            <button onclick="window.print()" class="btn btn-light">
+                <i class="bi bi-printer"></i> Print Report
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Report Period</h5>
+                    <p>@Model.StartDate.ToString("MMMM d, yyyy") - @Model.EndDate.ToString("MMMM d, yyyy")</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Generated on</h5>
+                    <p>@DateTime.Now.ToString("MMMM d, yyyy HH:mm")</p>
+                </div>
+            </div>
+            
+            <!-- Summary Section -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h3 class="display-4">@Model.TotalClients</h3>
+                            <p class="lead">Active Clients</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h3 class="display-4">@Model.TotalShipments</h3>
+                            <p class="lead">Total Shipments</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h3 class="display-4">@(Model.TotalClients > 0 ? (Model.TotalShipments / Model.TotalClients).ToString("N1") : "0")</h3>
+                            <p class="lead">Avg. Shipments per Client</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Client Activity Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Client Activity Details</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Email</th>
+                                            <th class="text-center">Shipments</th>
+                                            <th class="text-center">Total Weight (kg)</th>
+                                            <th class="text-end">Total Spent</th>
+                                            <th>Last Activity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var client in Model.ClientActivities)
+                                        {
+                                            <tr>
+                                                <td>@client.ClientName</td>
+                                                <td>@client.ClientEmail</td>
+                                                <td class="text-center">@client.ShipmentCount</td>
+                                                <td class="text-center">@client.TotalWeight.ToString("N2")</td>
+                                                <td class="text-end">$@client.TotalSpent.ToString("N2")</td>
+                                                <td>@client.LastActivity.ToString("MMM d, yyyy")</td>
+                                            </tr>
+                                        }
+                                        @if (!Model.ClientActivities.Any())
+                                        {
+                                            <tr>
+                                                <td colspan="6" class="text-center py-3">No client activity found in the selected date range</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Client Activity Visualization -->
+            @if (Model.ClientActivities.Any())
+            {
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h4 class="mb-0">Top Client Activity</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:300px;">
+                                    <!-- Bar chart with different colors -->
+                                    <div class="d-flex align-items-end" style="height:250px;">
+                                        @{
+                                            // Array of Bootstrap color classes to cycle through
+                                            string[] colorClasses = new[] { "bg-primary", "bg-success", "bg-info", "bg-warning", "bg-danger" };
+                                        }
+                                        
+                                        @for (int i = 0; i < Model.ClientActivities.OrderByDescending(c => c.ShipmentCount).Take(5).Count(); i++)
+                                        {
+                                            var client = Model.ClientActivities.OrderByDescending(c => c.ShipmentCount).Skip(i).First();
+                                            var colorClass = colorClasses[i % colorClasses.Length]; // Cycle through colors
+                                            
+                                            <div class="mx-auto text-center" style="width: @(100 / Math.Min(5, Math.Max(1, Model.ClientActivities.Count)))%;">
+                                                <div class="@colorClass" 
+                                                    style="height: @(Math.Min(200, client.ShipmentCount * 200 / Math.Max(1, Model.ClientActivities.Max(c => c.ShipmentCount))))px;">
+                                                </div>
+                                                <div class="mt-2 text-truncate" title="@client.ClientName">@client.ClientName</div>
+                                                <div class="small">@client.ShipmentCount shipments</div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Print styles */
+    @@media print {
+        .navbar, .btn-light, footer {
+            display: none !important;
+        }
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .card-header {
+            background-color: #f8f9fa !important;
+            color: #000 !important;
+        }
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        body {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+</style>

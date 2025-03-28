@@ -1,0 +1,173 @@
+<!-- Views/Report/StatusDistribution.cshtml -->
+@model L_Connect.Models.ViewModels.Reports.StatusDistributionReportViewModel
+@{
+    ViewData["Title"] = "Status Distribution Report";
+    Layout = "_AdminLayout";
+}
+
+<div class="container mt-4 report-container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Status Distribution Report</h2>
+            <button onclick="window.print()" class="btn btn-light">
+                <i class="bi bi-printer"></i> Print Report
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Report Period</h5>
+                    <p>@Model.StartDate.ToString("MMMM d, yyyy") - @Model.EndDate.ToString("MMMM d, yyyy")</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Generated on</h5>
+                    <p>@DateTime.Now.ToString("MMMM d, yyyy HH:mm")</p>
+                </div>
+            </div>
+            
+            <!-- Status Distribution Table -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Status Distribution</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th class="text-center">Count</th>
+                                            <th class="text-center">Percentage</th>
+                                            <th>Distribution</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var status in Model.StatusItems)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-@GetStatusBadgeClass(status.Status)">@status.Status</span>
+                                                </td>
+                                                <td class="text-center">@status.Count</td>
+                                                <td class="text-center">@status.Percentage%</td>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-@GetStatusBadgeClass(status.Status)" 
+                                                             role="progressbar" 
+                                                             style="width: @status.Percentage%;" 
+                                                             aria-valuenow="@status.Percentage" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                        @if (!Model.StatusItems.Any())
+                                        {
+                                            <tr>
+                                                <td colspan="4" class="text-center py-3">No data available for the selected period</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Summary</h4>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Total Shipments</h5>
+                            <p class="display-4 mb-4">@Model.TotalShipments</p>
+                            
+                            <h5 class="card-title">Status Breakdown</h5>
+                            <div class="list-group mt-3">
+                                @foreach (var status in Model.StatusItems)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>@status.Status</span>
+                                        <span class="badge bg-@GetStatusBadgeClass(status.Status) rounded-pill">@status.Count</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visualization -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Visual Representation</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height:300px;">
+                                <!-- Simple bar chart using div elements -->
+                                <div class="d-flex align-items-end" style="height:250px;">
+                                    @foreach (var status in Model.StatusItems)
+                                    {
+                                        <div class="mx-auto text-center" style="width: @(100 / Math.Max(1, Model.StatusItems.Count))%;">
+                                            <div class="bg-@GetStatusBadgeClass(status.Status)" 
+                                                 style="height: @(Math.Min(200, status.Count * 200 / Math.Max(1, Model.StatusItems.Max(i => i.Count))))px;">
+                                            </div>
+                                            <div class="mt-2">@status.Status</div>
+                                            <div class="small">@status.Count</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status?.ToLower() switch
+        {
+            "delivered" => "success",
+            "in transit" => "info",
+            "processing" => "warning",
+            "pending" => "secondary",
+            "cancelled" => "danger",
+            _ => "secondary"
+        };
+    }
+}
+
+<style>
+    /* Print styles */
+    @@media print {
+        .navbar, .btn-light, footer {
+            display: none !important;
+        }
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .card-header {
+            background-color: #f8f9fa !important;
+            color: #000 !important;
+        }
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        body {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+</style>

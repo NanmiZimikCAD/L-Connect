@@ -1,0 +1,89 @@
+<!-- Views/Report/Index.cshtml -->
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "_AdminLayout";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Reports Dashboard</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Date Range Selection</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="dateRangeForm" method="get">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="startDate" class="form-label">Start Date</label>
+                                        <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewBag.StartDate">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="endDate" class="form-label">End Date</label>
+                                        <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewBag.EndDate">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-bar-chart-line fs-1 text-primary mb-3"></i>
+                            <h3 class="card-title">Shipment Summary</h3>
+                            <p class="card-text">Overview of all shipments with key metrics and recent activity.</p>
+                            <button type="button" class="btn btn-primary btn-lg w-100" onclick="navigateToReport('ShipmentSummary')">
+                                View Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-pie-chart fs-1 text-success mb-3"></i>
+                            <h3 class="card-title">Status Distribution</h3>
+                            <p class="card-text">Analyze shipment statuses to identify trends and bottlenecks.</p>
+                            <button type="button" class="btn btn-success btn-lg w-100" onclick="navigateToReport('StatusDistribution')">
+                                View Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-people fs-1 text-info mb-3"></i>
+                            <h3 class="card-title">Client Activity</h3>
+                            <p class="card-text">Review client activity, including shipment volume and spending.</p>
+                            <button type="button" class="btn btn-info btn-lg w-100" onclick="navigateToReport('ClientActivity')">
+                                View Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function navigateToReport(reportType) {
+            const form = document.getElementById('dateRangeForm');
+            form.action = `/Report/${reportType}`;
+            form.submit();
+        }
+    </script>
+}
