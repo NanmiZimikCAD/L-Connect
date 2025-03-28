@@ -119,39 +119,60 @@ namespace L_Connect.Services.Implementations
         {
             // Get shipment by ID
             var shipment = await _context.Shipments
+                .Include(s => s.Client)
                 .FirstOrDefaultAsync(s => s.ShipmentId == id); // Note: using ShipmentId
 
             return shipment;
         }
 
-        public async Task<bool> UpdateShipmentStatusAsync(int shipmentId, string status, string location, string notes, int updatedByAdminId)
+        public async Task<bool> UpdateShipmentAsync(Shipment shipment, int updatedByAdminId, string statusNotes = null)
         {
-            // Find the shipment
-            var shipment = await _context.Shipments.FindAsync(shipmentId);
-            if (shipment == null)
+            try
+            {
+                var existingShipment = await _context.Shipments.FindAsync(shipment.ShipmentId);
+                
+                if (existingShipment == null)
+                    return false;
+                    
+                // Get current status before updating
+                string previousStatus = existingShipment.CurrentStatus;
+                string previousLocation = existingShipment.CurrentLocation;
+                
+                // Update all editable fields
+                existingShipment.Weight = shipment.Weight;
+                existingShipment.OriginAddress = shipment.OriginAddress;
+                existingShipment.DestinationAddress = shipment.DestinationAddress;
+                existingShipment.CurrentStatus = shipment.CurrentStatus;
+                existingShipment.CurrentLocation = shipment.CurrentLocation;
+                existingShipment.FinalCost = shipment.FinalCost;
+                existingShipment.EstimatedDeliveryDate = shipment.EstimatedDeliveryDate;
+                existingShipment.ServiceType = shipment.ServiceType;
+                
+                // If status or location changed, create a status history record
+                if (previousStatus != shipment.CurrentStatus || previousLocation != shipment.CurrentLocation)
+                {
+                    var notes = statusNotes ?? $"Status updated from {previousStatus} to {shipment.CurrentStatus}";
+                    
+                    var statusUpdate = new ShipmentStatus
+                    {
+                        ShipmentId = shipment.ShipmentId,
+                        Status = shipment.CurrentStatus,
+                        Location = shipment.CurrentLocation,
+                        Notes = notes,
+                        UpdatedAt = DateTime.UtcNow,
+                        UpdatedByAdminId = updatedByAdminId
+                    };
+                    
+                    _context.ShipmentStatuses.Add(statusUpdate);
+                }
+                
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
-
-            // Update the shipment
-            shipment.CurrentStatus = status;
-            shipment.CurrentLocation = location;
-
-            // Create status history record
-            var statusUpdate = new ShipmentStatus
-            {
-                ShipmentId = shipmentId,
-                Status = status,
-                Location = location,
-                Notes = notes,
-                UpdatedAt = DateTime.UtcNow,
-                UpdatedByAdminId = updatedByAdminId
-            };
-
-            _context.ShipmentStatuses.Add(statusUpdate);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         private string GenerateTrackingNumber()
@@ -174,6 +195,75 @@ namespace L_Connect.Services.Implementations
                 .Include(s => s.Client)
                 .OrderByDescending(s => s.CreatedAt)
                 .ToListAsync();
+        }
+
+        public async Task<bool> DeleteShipmentAsync(int shipmentId)
+        {
+            try
+            {
+                // Get shipment
+                var shipment = await _context.Shipments.FindAsync(shipmentId);
+                
+                if (shipment == null)
+                    return false;
+                    
+                // Validate status
+                if (shipment.CurrentStatus != "Pending" && shipment.CurrentStatus != "Cancelled")
+                    return false;
+                    
+                // Remove from database
+                _context.Shipments.Remove(shipment);
+                await _context.SaveChangesAsync();
+                
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<(List<Shipment> shipments, int totalCount)> SearchShipmentsAsync(
+            string trackingNumber = null,
+            string clientName = null,
+            string service = null,
+            string status = null,
+            int page = 1,
+            int pageSize = 10)
+        {
+            var query = _context.Shipments.AsQueryable();
+            
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(trackingNumber))
+                query = query.Where(s => s.TrackingNumber.Contains(trackingNumber));
+                
+            if (!string.IsNullOrWhiteSpace(clientName))
+            {
+                // Assuming Client is a navigation property or there's a ClientID property
+                // and we have a Users table to join with
+                query = query.Where(s => s.ClientId != null && 
+                    _context.Users.Any(u => u.UserId == s.ClientId && 
+                        (u.FullName.Contains(clientName) || u.Email.Contains(clientName))));
+            }
+                
+            // Adjust based on your actual property names
+            if (!string.IsNullOrWhiteSpace(service))
+                query = query.Where(s => s.ServiceType == service); // Assuming ServiceType property
+                
+            if (!string.IsNullOrWhiteSpace(status))
+                query = query.Where(s => s.CurrentStatus == status); // Assuming CurrentStatus property
+                
+            // Get total count for pagination
+            var totalCount = await query.CountAsync();
+            
+            // Apply pagination
+            var shipments = await query
+                .OrderByDescending(s => s.CreatedAt) // Assuming CreatedDate property
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+                
+            return (shipments, totalCount);
         }
     }
 }

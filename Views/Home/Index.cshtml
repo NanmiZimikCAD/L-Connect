@@ -2,30 +2,16 @@
     ViewData["Title"] = "Home";
 }
 
-<!-- Hero Section with Tracking -->
-@* <div class="hero-section py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="tracking-box bg-white p-4 rounded shadow">
-                    <h2 class="text-center mb-4">Track Your Shipment</h2>
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control-lg" placeholder="Enter tracking number">
-                        <button class="btn btn-primary btn-lg">
-                            <i class="fas fa-search me-2"></i>Track
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> *@
-<div class="hero-section py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="tracking-box bg-white p-4 rounded shadow">
-                    <h2 class="text-center mb-4">Track Your Shipment</h2>
+<!-- Hero Section with Background Image -->
+<section class="hero-section position-relative text-white d-flex align-items-center">
+    <div class="hero-image-overlay"></div>
+    <div class="container py-5 position-relative">
+        <div class="row">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-4">Streamlined Logistics for Small Businesses</h1>
+                <p class="lead mb-5">Track, manage, and deliver with confidence. L-Connect bridges the gap between manual processes and enterprise solutions.</p>
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="text-dark h5 mb-3">Track Your Shipment</h2>
                     <form asp-controller="Tracking" asp-action="Index" method="post">
                         <div class="input-group">
                             <input type="text" name="TrackingNumber" class="form-control form-control-lg" placeholder="Enter tracking number" required>
@@ -38,43 +24,218 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Features Section -->
-<div class="container py-5">
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
-                <h3 class="mb-3">Request Quote</h3>
-                <p class="text-muted">Get instant shipping quotes</p>
-                <a asp-controller="QuoteRequest" asp-action="Create" class="btn btn-primary">Get Quote</a>
+<!-- How L-Connect Works Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">How L-Connect Works</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-search fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Track Without Account</h3>
+                <p class="mb-3">Don't have an account? Simply enter your tracking number to get detailed shipment information.</p>
+                <a href="@Url.Action("Index", "Tracking")" class="text-primary fw-bold">Track Now <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
-                <h3 class="mb-3">Client Portal</h3>
-                <p class="text-muted">Manage your shipments</p>
-                <button class="btn btn-primary">Learn More</button>
+            <div class="col-md-4 text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-user-plus fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Become a Client</h3>
+                <p class="mb-3">Register for an account to gain access to enhanced features like shipment history and document management.</p>
+                <a href="@Url.Action("Register", "Account")" class="text-primary fw-bold">Register <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="feature-card text-center p-4 bg-white rounded shadow-sm">
-                <h3 class="mb-3">Document Center</h3>
-                <p class="text-muted">Access shipping documents</p>
-                <button class="btn btn-primary">Access Docs</button>
+            <div class="col-md-4 text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <i class="fas fa-folder-open fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Client Dashboard</h3>
+                <p class="mb-3">Access all your shipments, track status updates, view estimated delivery times, and manage shipping documents.</p>
+                <a href="@Url.Action("Login", "Account")" class="text-primary fw-bold">Sign In <i class="fas fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- Contact Section -->
+<!-- Services Section -->
+@* <section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Our Services</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm transition-card">
+                    <div class="card-body">
+                        <div class="d-inline-block bg-primary bg-opacity-10 p-3 rounded mb-3">
+                            <i class="fas fa-file-invoice fa-2x text-primary"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Request Quote</h3>
+                        <p class="text-muted mb-3">Get instant shipping quotes based on your specific requirements</p>
+                        <a asp-controller="QuoteRequest" asp-action="Create" class="text-primary fw-bold">Get Quote <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm transition-card">
+                    <div class="card-body">
+                        <div class="d-inline-block bg-primary bg-opacity-10 p-3 rounded mb-3">
+                            <i class="fas fa-tachometer-alt fa-2x text-primary"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Client Portal</h3>
+                        <p class="text-muted mb-3">Access your shipments, analytics, and business insights in one place</p>
+                        <div>
+                            <a asp-controller="Account" asp-action="Login" class="text-primary fw-bold me-3">Sign In <i class="fas fa-arrow-right ms-1"></i></a>
+                            <a asp-controller="Account" asp-action="Register" class="text-muted">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm transition-card">
+                    <div class="card-body">
+                        <div class="d-inline-block bg-primary bg-opacity-10 p-3 rounded mb-3">
+                            <i class="fas fa-file-alt fa-2x text-primary"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Document Center</h3>
+                        <p class="text-muted mb-3">Easily access and manage all your shipping documentation</p>
+                        <a asp-controller="Tracking" asp-action="Index" class="text-primary fw-bold">Track to Access <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> *@
+<!-- Benefits Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Why Choose L-Connect</h2>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-chart-line fa-3x"></i>
+                </div>
+                <h3 class="h5 mb-3">Real-time Tracking</h3>
+                <p class="text-muted">Get instant updates on your shipments with our advanced tracking system.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-shield-alt fa-3x"></i>
+                </div>
+                <h3 class="h5 mb-3">Secure Document Management</h3>
+                <p class="text-muted">Access and manage all your shipping documents in one secure location.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-tachometer-alt fa-3x"></i>
+                </div>
+                <h3 class="h5 mb-3">Client-friendly Dashboard</h3>
+                <p class="text-muted">Intuitive interface designed specifically for small logistics businesses.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-money-bill-wave fa-3x"></i>
+                </div>
+                <h3 class="h5 mb-3">Affordable Solution</h3>
+                <p class="text-muted">Enterprise-level features at prices small businesses can afford.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Global Coverage Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-4">Global Coverage</h2>
+                <p class="mb-4">We support shipments between major global hubs, with competitive rates and reliable delivery times.</p>
+                <div class="mb-4">
+                    <div class="mb-2"><i class="fas fa-circle text-primary me-2 small"></i> Shenzhen to Sao Paulo - from $180</div>
+                    <div class="mb-2"><i class="fas fa-circle text-primary me-2 small"></i> Shenzhen to Toronto - from $210</div>
+                    <div class="mb-2"><i class="fas fa-circle text-primary me-2 small"></i> Shenzhen to Vancouver - from $195</div>
+                    <div class="mb-2"><i class="fas fa-circle text-primary me-2 small"></i> Shenzhen to Mexico City - from $210</div>
+                </div>
+                <a asp-controller="Services" asp-action="Index" class="btn btn-primary">View All Routes</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/images/global-network.jpg" alt="Global Coverage Map" class="img-fluid rounded shadow" onerror="this.src='/images/placeholder-map.jpg'; this.onerror=null;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">What Our Clients Say</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                                <span class="fw-bold text-primary">E</span>
+                            </div>
+                            <div>
+                                <h4 class="h5 mb-0">EcoShip Inc.</h4>
+                                <div class="small text-muted">Vancouver, Canada</div>
+                            </div>
+                        </div>
+                        <p class="fst-italic mb-0">
+                            "L-Connect transformed our logistics workflow. We've reduced processing time by 40% and our clients love the transparency."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                                <span class="fw-bold text-primary">G</span>
+                            </div>
+                            <div>
+                                <h4 class="h5 mb-0">Global Traders Ltd.</h4>
+                                <div class="small text-muted">Sao Paulo, Brazil</div>
+                            </div>
+                        </div>
+                        <p class="fst-italic mb-0">
+                            "As a small business, we needed an affordable solution that wouldn't sacrifice quality. L-Connect delivered exactly that."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                                <span class="fw-bold text-primary">M</span>
+                            </div>
+                            <div>
+                                <h4 class="h5 mb-0">Metro Logistics</h4>
+                                <div class="small text-muted">Toronto, Canada</div>
+                            </div>
+                        </div>
+                        <p class="fst-italic mb-0">
+                            "The tracking system is incredibly reliable. Our customers can always know where their packages are, which has reduced support calls by 60%."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section (preserving original) -->
 <div class="contact-section bg-light py-5">
     <div class="container text-center">
         <h2 class="mb-3">Need Assistance?</h2>
         <p class="text-muted mb-4">Contact our support team</p>
         <div class="bg-white d-inline-block p-4 rounded shadow-sm">
             <h3 class="text-primary mb-3">1-800-LCONNECT</h3>
-            <button class="btn btn-primary btn-lg">Contact Us</button>
+            <a asp-controller="Home" asp-action="Support" class="btn btn-primary btn-lg">Contact Us</a>
         </div>
     </div>
 </div>

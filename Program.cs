@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using L_Connect.Services.Interfaces;
 using L_Connect.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
+using L_Connect.Services;
+
+// - Database connection
+// - Authentication services
+// - Cookie settings
+// - Password hasher service
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +45,21 @@ builder.Services.AddAuthentication(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
     options.ExpireTimeSpan = TimeSpan.FromHours(24);
 });
+
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+//phase 3: Add DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
+
+// Configure document storage options
+builder.Services.Configure<DocumentStorageOptions>(builder.Configuration.GetSection("DocumentStorage"));
+
+// Register document service
+builder.Services.AddScoped<IDocumentService, LocalFileDocumentService>();
 
 var app = builder.Build();
 
