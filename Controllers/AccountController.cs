@@ -25,6 +25,10 @@ namespace L_Connect.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
 
+        // In AccountController
+        private static Dictionary<string, (string email, DateTime expiry)> _resetTokens = new();
+
+
         public AccountController(
         ILogger<AccountController> logger,
         ApplicationDbContext context,
@@ -193,5 +197,79 @@ namespace L_Connect.Controllers
             // Redirect to home page
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ViewBag.Message = "Please enter your email.";
+                return View();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                ViewBag.Message = "No account found with this email.";
+                return View();
+            }
+
+            var token = Guid.NewGuid().ToString();
+            _resetTokens[token] = (email, DateTime.UtcNow.AddMinutes(15)); // Expires in 15 mins
+
+            var resetLink = Url.Action("ResetPassword", "Account", new { token = token }, Request.Scheme);
+            ViewBag.Message = $"Password reset link: {resetLink}";
+
+            return View();
+        }
+
+        [HttpGet]
+public IActionResult ResetPassword(string token)
+{
+    if (!_resetTokens.ContainsKey(token) || _resetTokens[token].expiry < DateTime.UtcNow)
+    {
+        ViewBag.Message = "Invalid or expired token.";
+        return View();
+    }
+
+    ViewBag.Token = token;
+    ViewBag.Email = _resetTokens[token].email;
+    return View();
+}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(string email, string token, string newPassword)
+        {
+            if (!_resetTokens.ContainsKey(token) || _resetTokens[token].expiry < DateTime.UtcNow)
+            {
+                ViewBag.Message = "Invalid or expired token.";
+                return View();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                ViewBag.Message = "User not found.";
+                return View();
+            }
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
+            await _context.SaveChangesAsync();
+
+            _resetTokens.Remove(token); // one-time use
+            ViewBag.Message = "Password reset successful.";
+            return RedirectToAction("Login");
+        }
+
+
+
     }
 }
