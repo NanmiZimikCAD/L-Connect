@@ -12,20 +12,26 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2a2391;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">L-Connect Client Portal</a>
+            @* <a class="navbar-brand" href="#">L-Connect Client Portal</a> *@
+            <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Dashboard", "Client")">
+                <div class="logo-circle me-2">
+                    <img src="~/images/L-Connect-logo3.png" alt="L-Connect Logo" class="logo-img">
+                </div>
+                <span class="fw-bold">L-Connect Client Portal</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
+                    @* <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Dashboard" ? "active" : "")" 
                            asp-controller="Client" asp-action="Dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Shipments" ? "active" : "")" 
                            asp-controller="Client" asp-action="Shipments">My Shipments</a>
-                    </li>
+                    </li> *@
                     <li class="nav-item">
                         <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Tracking" ? "active" : "")" 
                            asp-controller="Tracking" asp-action="Index">Track Package</a>
