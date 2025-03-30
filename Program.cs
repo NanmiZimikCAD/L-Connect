@@ -56,6 +56,9 @@ builder.Services.AddScoped<IDocumentService, LocalFileDocumentService>();
 // Register report services for dependency injection
 builder.Services.AddScoped<IReportService, ReportService>();
 
+// Register pricing service for dependency injection
+builder.Services.AddScoped<IPricingService, PricingService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

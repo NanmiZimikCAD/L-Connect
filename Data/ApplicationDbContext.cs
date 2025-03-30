@@ -25,6 +25,7 @@ namespace L_Connect.Data
         public DbSet<ShipmentStatus> ShipmentStatuses { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
+        public DbSet<Pricing> Pricing { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -265,6 +266,100 @@ namespace L_Connect.Data
                     TypeName = "Proof of Delivery", 
                     Description = "Confirmation of delivery receipt", 
                     AllowedExtensions = ".pdf,.jpg,.png" 
+                }
+            );
+
+            // Seed pricing data
+            modelBuilder.Entity<Pricing>().HasData(
+                new Pricing
+                {
+                    PriceId = 1,
+                    OriginLocation = "Shenzhen",
+                    DestinationLocation = "Sao Paulo",
+                    TransportationMethod = "Flight",
+                    BaseRate = 250m,
+                    WeightRate = 5m,
+                    BulkThreshold = 10,
+                    BulkDiscountRate = 0.10m,
+                    CustomServiceCharge = 50m,
+                    InsuranceCharge = 20m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
+                },
+                new Pricing
+                {
+                    PriceId = 2,
+                    OriginLocation = "Shenzhen",
+                    DestinationLocation = "Sao Paulo",
+                    TransportationMethod = "Sea",
+                    BaseRate = 180m,
+                    WeightRate = 3m,
+                    BulkThreshold = 10,
+                    BulkDiscountRate = 0.10m,
+                    CustomServiceCharge = 50m,
+                    InsuranceCharge = 20m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
+                },
+                new Pricing
+                {
+                    PriceId = 3,
+                    OriginLocation = "Shenzhen",
+                    DestinationLocation = "Toronto",
+                    TransportationMethod = "Flight",
+                    BaseRate = 290m,
+                    WeightRate = 5m,
+                    BulkThreshold = 12,
+                    BulkDiscountRate = 0.15m,
+                    CustomServiceCharge = 55m,
+                    InsuranceCharge = 30m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
+                },
+                new Pricing
+                {
+                    PriceId = 4,
+                    OriginLocation = "Shenzhen",
+                    DestinationLocation = "Toronto",
+                    TransportationMethod = "Sea",
+                    BaseRate = 210m,
+                    WeightRate = 3m,
+                    BulkThreshold = 12,
+                    BulkDiscountRate = 0.15m,
+                    CustomServiceCharge = 55m,
+                    InsuranceCharge = 30m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
+                },
+                new Pricing
+                {
+                    PriceId = 5,
+                    OriginLocation = "USA",
+                    DestinationLocation = "Canada",
+                    TransportationMethod = "Flight",
+                    BaseRate = 150m,
+                    WeightRate = 4m,
+                    BulkThreshold = 10,
+                    BulkDiscountRate = 0.10m,
+                    CustomServiceCharge = 40m,
+                    InsuranceCharge = 15m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
+                },
+                new Pricing
+                {
+                    PriceId = 6,
+                    OriginLocation = "USA",
+                    DestinationLocation = "Canada",
+                    TransportationMethod = "Sea",
+                    BaseRate = 120m,
+                    WeightRate = 2.5m,
+                    BulkThreshold = 10,
+                    BulkDiscountRate = 0.10m,
+                    CustomServiceCharge = 40m,
+                    InsuranceCharge = 15m,
+                    IsActive = true,
+                    LastUpdatedAt = DateTime.UtcNow
                 }
             );
         }
