@@ -2,30 +2,124 @@
 
 <div class="container py-5">
     <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Quote Summary</h2>
+        </div>
         <div class="card-body">
-            <h2 class="mb-4 text-primary">Quote Summary</h2>
-
             <div class="row">
+                <!-- Customer Information -->
                 <div class="col-md-6">
-                    <p><strong>Customer Name:</strong> @Model.CustomerName</p>
-                    <p><strong>Email:</strong> @Model.Email</p>
-                    <p><strong>Source:</strong> @Model.Source</p>
-                    <p><strong>Destination:</strong> @Model.Destination</p>
+                    <h4 class="mb-3">Customer Information</h4>
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Customer Name:</th>
+                            <td>@Model.CustomerName</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>@Model.Email</td>
+                        </tr>
+                    </table>
                 </div>
+                
+                <!-- Shipment Details -->
                 <div class="col-md-6">
-                    <p><strong>Weight:</strong> @Model.Weight.ToString("N2") kg</p>
-                    <p><strong>Base Price Per Kg:</strong> $@Model.BasePricePerKg.ToString("N2")</p>
-                    <p><strong>Distance:</strong> @Model.Distance.ToString("N2") km</p>
-                    @if (Model.Discount.HasValue)
-                    {
-                        <p><strong>Discount:</strong> @Model.Discount% (Bulk Order)</p>
-                    }
-                    <p><strong>Estimated Price:</strong> <span class="text-success">$@Model.EstimatedPrice.ToString("N2")</span></p>
+                    <h4 class="mb-3">Shipment Details</h4>
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Route:</th>
+                            <td>@Model.Source to @Model.Destination</td>
+                        </tr>
+                        <tr>
+                            <th>Transportation:</th>
+                            <td><span class="badge bg-info">@Model.TransportationMethod</span></td>
+                        </tr>
+                        <tr>
+                            <th>Weight:</th>
+                            <td>@Model.FormattedWeight kg × @Model.Quantity = @Model.FormattedTotalWeight kg</td>
+                        </tr>
+                        <tr>
+                            <th>Distance:</th>
+                            <td>@Model.FormattedDistance km</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-
+            
             <hr />
-
+            
+            <!-- Cost Breakdown -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h4>Quote Details</h4>
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-6">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <th width="60%">Base Cost:</th>
+                                            <td class="text-end">@Model.FormattedBaseCost</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Weight Cost (@Model.BasePricePerKg.ToString("C2")/kg):</th>
+                                            <td class="text-end">@Model.FormattedWeightCost</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Subtotal:</th>
+                                            <td class="text-end">@Model.FormattedSubtotal</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <!-- Right Column -->
+                                <div class="col-md-6">
+                                    <table class="table table-borderless">
+                                        @if (Model.DiscountPercentage.HasValue)
+                                        {
+                                            <tr>
+                                                <th width="60%">Bulk Discount (@Model.DiscountPercentage?.ToString("0.#")%):</th>
+                                                <td class="text-end text-success">-@Model.FormattedDiscountAmount</td>
+                                            </tr>
+                                        }
+                                        
+                                        @if (Model.HasCustomServices)
+                                        {
+                                            <tr>
+                                                <th>Custom Services:</th>
+                                                <td class="text-end">@Model.FormattedCustomServiceCharge</td>
+                                            </tr>
+                                        }
+                                        
+                                        @if (Model.HasInsurance)
+                                        {
+                                            <tr>
+                                                <th>Insurance:</th>
+                                                <td class="text-end">@Model.FormattedInsuranceCharge</td>
+                                            </tr>
+                                        }
+                                        
+                                        <tr class="border-top">
+                                            <th class="fw-bold">Total Estimated Price:</th>
+                                            <td class="text-end fw-bold fs-5 text-primary">@Model.FormattedEstimatedPrice</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        This is an estimate based on the information provided. Actual shipping costs may vary based on final weight, dimensions, and service requirements.
+                        This quote is valid for 14 days.
+                    </div>
+                </div>
+            </div>
+            
+            <hr />
+            
             <div class="text-center mt-4">
                 <a asp-action="Create" class="btn btn-primary me-2">
                     Request Another Quote

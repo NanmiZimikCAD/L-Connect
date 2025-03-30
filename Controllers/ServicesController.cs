@@ -1,14 +1,53 @@
 using Microsoft.AspNetCore.Mvc;
 using L_Connect.Models.ViewModels.Services;
+using L_Connect.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace L_Connect.Controllers.Services
+namespace L_Connect.Controllers
 {
     public class ServicesController : Controller
     {
-        public IActionResult Index()
+        private readonly IPricingService _pricingService;
+
+        public ServicesController(IPricingService pricingService)
         {
-            var services = new List<ServiceViewModel>
+            _pricingService = pricingService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            try
+            {
+                // Get route information from the pricing service
+                var routes = await _pricingService.GetAllRoutesAsync();
+                
+                // Convert to ServiceViewModel list
+                var services = routes.Select(r => new ServiceViewModel
+                {
+                    Route = $"{r.Origin} to {r.Destination}",
+                    TransportationMethods = r.BasePrices.Keys.ToList(),
+                    BasePrices = r.BasePrices,
+                    BulkThreshold = r.BulkThreshold,
+                    BulkDiscountRate = r.BulkDiscountRate,
+                    CustomServiceCharge = r.CustomServiceCharge,
+                    InsuranceCharge = r.InsuranceCharge
+                }).ToList();
+
+                return View(services);
+            }
+            catch
+            {
+                // If there's an error, fall back to hardcoded data
+                return View(GetLegacyServiceData());
+            }
+        }
+
+        // Fallback method to maintain backwards compatibility
+        private List<ServiceViewModel> GetLegacyServiceData()
+        {
+            return new List<ServiceViewModel>
             {
                 new ServiceViewModel 
                 {
@@ -95,8 +134,6 @@ namespace L_Connect.Controllers.Services
                     InsuranceCharge = 20m
                 }
             };
-
-            return View(services);
         }
     }
 }
