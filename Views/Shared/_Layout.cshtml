@@ -12,13 +12,19 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold fs-4">L-Connect</a>
+            @* <a asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold fs-4">L-Connect</a> *@
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand d-flex align-items-center">
+                <div class="logo-circle me-2">
+                    <img src="~/images/L-Connect-logo3.png" alt="L-Connect Logo" class="logo-img">
+                </div>
+                <span class="fw-bold fs-4">L-Connect</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="QuoteRequest" asp-action="Create">REQUEST QUOTE</a></li>
                     <li class="nav-item">
                     <a class="nav-link" asp-controller="Services" asp-action="Index">SERVICES</a>
                 </li>
@@ -51,7 +57,12 @@
         <div class="row g-4">
             <!-- Company Info Column -->
             <div class="col-lg-3 col-md-6">
-                <h4 class="mb-4">L-Connect</h4>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand d-flex align-items-center">
+                    <div class="logo-circle me-2">
+                        <img src="~/images/L-Connect-logo3.png" alt="L-Connect Logo" class="logo-img">
+                    </div>
+                    <span class="fw-bold fs-4">L-Connect</span>
+                </a>
                 <p class="mb-4">
                     Bridging the gap between manual processes and enterprise logistics solutions.
                 </p>

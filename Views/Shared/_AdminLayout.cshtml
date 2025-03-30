@@ -12,7 +12,13 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2a2391;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="@Url.Action("Dashboard", "Admin")">L-Connect Admin Portal</a>
+            @* <a class="navbar-brand" href="@Url.Action("Dashboard", "Admin")">L-Connect Admin Portal</a> *@
+            <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Dashboard", "Admin")">
+                <div class="logo-circle me-2">
+                    <img src="~/images/L-Connect-logo3.png" alt="L-Connect Logo" class="logo-img">
+                </div>
+                <span class="fw-bold">L-Connect Admin Portal</span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
