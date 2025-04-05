@@ -40,12 +40,12 @@ namespace L_Connect.Models.ViewModels.Quote
         public string FormattedWeight => Weight.ToString("N2");
         public string FormattedTotalWeight => TotalWeight.ToString("N2");
         public string FormattedDistance => Distance.ToString("N2");
-        public string FormattedBaseCost => BaseCost.ToString("C2");
-        public string FormattedWeightCost => WeightCost.ToString("C2");
-        public string FormattedSubtotal => SubtotalBeforeDiscounts.ToString("C2");
-        public string FormattedDiscountAmount => DiscountAmount.ToString("C2");
-        public string FormattedCustomServiceCharge => CustomServiceCharge.ToString("C2");
-        public string FormattedInsuranceCharge => InsuranceCharge.ToString("C2");
-        public string FormattedEstimatedPrice => EstimatedPrice.ToString("C2");
+        public string FormattedBaseCost => string.Format("${0:0.00}", BaseCost);
+        public string FormattedWeightCost => string.Format("${0:0.00}", WeightCost);
+        public string FormattedSubtotal => string.Format("${0:0.00}", SubtotalBeforeDiscounts);
+        public string FormattedDiscountAmount => string.Format("${0:0.00}", DiscountAmount);
+        public string FormattedCustomServiceCharge => string.Format("${0:0.00}", CustomServiceCharge);
+        public string FormattedInsuranceCharge => string.Format("${0:0.00}", InsuranceCharge);
+        public string FormattedEstimatedPrice => string.Format("${0:0.00}", EstimatedPrice);
     }
 }
