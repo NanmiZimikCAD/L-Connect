@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Shipment Details";
-    Layout = "_AdminLayout";
+    Layout = "_ClientLayout";
 }
 
 <div class="container mt-4">
@@ -119,13 +119,9 @@
                                                 <td>@document.UploadedDate.ToString("MMM dd, yyyy HH:mm")</td>
                                                 <td>
                                                     <a asp-controller="Document" asp-action="Download" asp-route-id="@document.DocumentID" 
-                                                    class="btn btn-sm btn-outline-primary" title="Download">
-                                                        <i class="bi bi-download"></i>
+                                                       class="btn btn-sm btn-outline-primary" title="Download">
+                                                        <i class="bi bi-download"></i> Download
                                                     </a>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
-                                                            data-bs-target="#deleteDocumentModal" data-document-id="@document.DocumentID" title="Delete">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
                                                 </td>
                                             </tr>
                                         }

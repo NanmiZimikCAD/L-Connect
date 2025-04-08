@@ -95,7 +95,7 @@
                                                 <span class="badge @item.StatusClass">@item.Status</span>
                                                 <small class="d-block mt-2">@item.AdditionalInfo</small>
                                             </p>
-                                            <a asp-controller="Tracking" asp-action="Result" asp-route-trackingNumber="@item.ItemId" class="btn btn-sm btn-primary">View Details</a>
+                                            <a asp-controller="Client" asp-action="ShipmentDetails" asp-route-trackingNumber="@item.ItemId" class="btn btn-sm btn-primary">View Details</a>
                                         </div>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@
                                             <td><span class="badge bg-@GetStatusClass(shipment.CurrentStatus)">@shipment.CurrentStatus</span></td>
                                             <td>@(shipment.EstimatedDeliveryDate?.ToString("MMM dd, yyyy") ?? "Not available")</td>
                                             <td>
-                                                <a asp-controller="Tracking" asp-action="Result" asp-route-trackingNumber="@shipment.TrackingNumber" class="btn btn-sm btn-primary">
+                                                <a asp-controller="Client" asp-action="ShipmentDetails" asp-route-trackingNumber="@shipment.TrackingNumber" class="btn btn-sm btn-primary">
                                                     <i class="bi bi-eye"></i> Details
                                                 </a>
                                             </td>
