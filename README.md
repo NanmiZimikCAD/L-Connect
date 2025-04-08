@@ -1,37 +1,45 @@
 # L-Connect: Logistics Management System
 
-## Project Overview
+<p align="center">
+  <img src="path/to/logo.png" alt="L-Connect Logo" width="200"/>
+</p>
 
-### Vision Statement:
+<p align="center">
+  <a href="#overview">Overview</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#prerequisites">Prerequisites</a> •
+  <a href="#quick-setup">Quick Setup</a> •
+  <a href="#documentation">Documentation</a> •
+  <a href="#team">Team</a> •
+  <a href="#license">License</a>
+</p>
+
+## Overview
+
+L-Connect is a streamlined logistics management system designed specifically for small logistics companies transitioning from manual to digital operations. This intelligent platform bridges the gap between basic manual processes and complex enterprise solutions, offering essential digital tools for cargo tracking, document management, and client interactions.
+
+### Vision Statement
 To streamline small-scale logistics operations by providing an accessible digital platform that bridges the gap between manual processes and enterprise-level solutions.
 
-### Mission Statement:
-To empower small logistics companies with affordable, efficient digital tools that streamline their operations, enhance client communication, and improve overall service delivery in international cargo transportation.
+### Target Market
+- 🏢 Small logistics companies with limited digital infrastructure
+- 🔍 Businesses looking for efficient tracking and management solutions
+- 🌐 International parcel transportation service providers
 
-### Business Context:
-L-Connect is a streamlined logistics management system designed to address the digital transformation needs of small logistics companies. Currently, many small logistics businesses rely on manual processes and social media to manage their operations, lacking access to sophisticated digital tools.
+## Key Features
 
-### Problem Statement:
-Most logistics software is designed for large enterprises, leaving smaller companies underserved. L-Connect aims to fill this critical gap by offering a lightweight, affordable solution tailored to small businesses' unique workflows and client management needs.
+L-Connect provides a comprehensive suite of logistics management tools:
 
-### Target Market:
-- Small logistics companies with limited digital infrastructure
-- Businesses looking for efficient tracking and management solutions
-- International parcel transportation service providers
+- 🔒 **User Authentication System** - Secure role-based access control for administrators and clients
+- 📦 **Comprehensive Shipment Tracking** - Real-time tracking for all shipments with detailed status history
+- 📄 **Document Management** - Secure storage and retrieval of shipping documents
+- 💰 **Dynamic Quote System** - Instant price quotes based on route, weight, and transportation method
+- 📊 **Reporting and Analytics** - Data-driven insights into shipping operations and performance
+- 👥 **Client Portal and Dashboard** - Personalized client access to shipments and documents
+- 🌍 **Multi-lingual Support** - (Planned) Localization for international users
+- 📱 **Mobile Application Support** - (Planned) Mobile access for on-the-go management
 
-## Key Features (Implemented/Planned):
-- 🔒 **User Authentication System** - Complete
-- 📦 **Comprehensive Shipment Tracking** - Complete
-- 📄 **Document Management** - Complete
-- 💰 **Dynamic Quote System** - Complete
-- 📊 **Reporting and Analytics** - Complete
-- 👥 **Client Portal and Dashboard** - In Progress
-- 🌍 **Multi-lingual Support** - Planned
-- 📱 **Mobile Application Support** - Planned
-
-## Recently Added Features
-
-### 💰 Enhanced Quote System (March 2025)
+### Recently Added: Enhanced Quote System (March 2025)
 The system now features a comprehensive shipping quote calculator that:
 - Uses consistent pricing data across services and quotes
 - Provides dynamic calculations based on locations, weight, and transport method
@@ -40,124 +48,86 @@ The system now features a comprehensive shipping quote calculator that:
 - Shows detailed cost breakdowns
 - Offers real-time price estimation during form completion
 
+## Prerequisites
+
+Before installing L-Connect, ensure your system meets the following requirements:
+
+- 🔷 **XAMPP 8.0+** (includes Apache, MySQL, PHP)
+- 🔷 **.NET 6.0 SDK** or newer
+- 🔷 **Git** for repository access
+- 🔷 **Visual Studio Code** or Visual Studio 2022 (for development)
+
+## Quick Setup
+
+1. **Install XAMPP**
+   ```
+   Download and install XAMPP from apachefriends.org
+   ```
+
+2. **Clone Repository**
+   ```bash
+   git clone https://github.com/YourOrganization/L-Connect.git
+   cd L-Connect
+   ```
+
+3. **Start MySQL in XAMPP**
+   ```
+   Launch XAMPP Control Panel and start MySQL and Apache services
+   ```
+
+4. **Create Database**
+   ```
+   Navigate to http://localhost/phpmyadmin/
+   Create new database named 'l_connect' with utf8mb4_unicode_ci collation
+   ```
+
+5. **Configure Connection**
+   ```bash
+   # Edit appsettings.json with your database connection details
+   ```
+
+6. **Apply Migrations and Run**
+   ```bash
+   dotnet restore
+   dotnet ef database update
+   dotnet run
+   ```
+
+7. **Access Application**
+   ```
+   Open browser and navigate to https://localhost:5001
+   Login with admin@test.com / admin123
+   ```
+
+For detailed installation instructions, please refer to the [Deployment Guide](docs/DeploymentGuide.md).
+
 ## Project Structure
+
 ```
 L-Connect/
-├── Controllers/
-│   ├── AccountController.cs        # Authentication & user management
-│   ├── AdminController.cs          # Admin features
-│   ├── ClientController.cs         # Client dashboard & features
-│   ├── DocumentController.cs       # Document management
-│   ├── HomeController.cs           # Public pages
-│   ├── QuoteRequestController.cs   # Quote calculations and requests
-│   ├── ReportController.cs         # Reporting features
-│   ├── ServicesController.cs       # Service pricing display
-│   └── TrackingController.cs       # Tracking functionality
-├── Data/
-│   ├── Migrations/                 # Database migrations
-│   └── ApplicationDbContext.cs     
-├── Models/
-│   ├── Domain/
-│   │   ├── Document.cs             # File attachments
-│   │   ├── Pricing.cs              # Route/service pricing
-│   │   ├── Role.cs                 # User roles
-│   │   ├── Shipment.cs             # Shipment tracking
-│   │   ├── ShipmentStatus.cs       # Status updates 
-│   │   └── User.cs                 # User information
-│   ├── PricingService/             # Quote calculation models
-│   │   ├── RouteInfo.cs            
-│   │   └── QuoteCalculationResult.cs
-│   ├── ViewModels/                 # View-specific models
-│   │   ├── Auth/
-│   │   ├── Client/
-│   │   ├── Documents/
-│   │   ├── Quote/
-│   │   ├── Reports/
-│   │   ├── Services/
-│   │   ├── Shipments/
-│   │   └── Tracking/
-│   └── ErrorViewModel.cs
-├── Services/
-│   ├── Interfaces/
-│   │   ├── IDocumentService.cs
-│   │   ├── IPricingService.cs
-│   │   ├── IReportService.cs
-│   │   ├── IShipmentService.cs
-│   │   └── IUserService.cs
-│   └── Implementations/
-│       ├── DocumentService.cs
-│       ├── PricingService.cs
-│       ├── ReportService.cs
-│       ├── ShipmentService.cs
-│       └── UserService.cs
-├── Views/
-│   ├── Account/
-│   ├── Admin/
-│   ├── Client/
-│   ├── Document/
-│   ├── Home/
-│   ├── QuoteRequest/
-│   ├── Report/
-│   ├── Services/
-│   ├── Tracking/
-│   └── Shared/
-└── wwwroot/
-    ├── css/
-    ├── js/
-    ├── lib/
-    └── images/
+├── Controllers/              # MVC Controllers by functional area
+├── Data/                     # Database context and migrations
+├── Models/                   # Domain and view models
+│   ├── Domain/               # Database entity models
+│   └── ViewModels/           # Screen-specific data models
+├── Services/                 # Business logic implementation
+├── Views/                    # Razor view templates
+└── wwwroot/                  # Static assets (CSS, JS, images)
 ```
 
-## Prerequisites
-- [.NET SDK](https://dotnet.microsoft.com/download) (Version 6.0 or later)
-- [Visual Studio Code](https://code.visualstudio.com/) or Visual Studio 2022
-- [MySQL](https://www.mysql.com/) or [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+## Documentation
 
-## Setup and Installation
+- [Deployment Guide](docs/DeploymentGuide.md) - Detailed installation and configuration instructions
+- [User Manual](docs/UserManual.md) - Complete guide for using the application
+- [Database Schema](docs/DatabaseSchema.md) - Entity relationship diagrams and database details
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/YourOrganization/L-Connect.git
-cd L-Connect
-```
+## Team
 
-### 2. Database Configuration
-- Update the connection string in `appsettings.json`
-- Run migrations to create the database:
-```bash
-dotnet ef database update
-```
+- **Nanmi Zimik** - Team Lead/Developer - [nzimik5599@conestogac.on.ca]
+- **Tasnim Bano** - Developer - [tbano9947@conestogac.on.ca]
+- **Shresta Rapol** - Developer - [srapol7701@conestogac.on.ca]
+- **Yipeng Huang** - Developer - [yhuang3398@conestogac.on.ca]
 
-### 3. Run the Application
-```bash
-dotnet run
-```
+## License
 
-### 4. Access the Application
-Open your browser and navigate to:
-```
-https://localhost:5001
-```
-
-## Development Notes
-
-### Quote System
-The quote system provides pricing estimates for shipping services between various locations. Pricing data is centralized in the database and used consistently throughout the application:
-
-- `PricingService` - Handles all pricing calculations and data retrieval
-- `QuoteRequestController` - Processes quote form submissions and returns estimates
-- `ServicesController` - Displays service pricing options
-
-To add new pricing:
-1. Access the admin portal
-2. Navigate to "Pricing Management"
-3. Add new pricing entries for routes and transportation methods
-
-## ERD Diagram
-![ERD Diagram](path/to/erd-image.png)
-
-## Contact
-- Team Lead: [nzimik5599@conestogac.on.ca]
-- Developer: [tbano9947@conestogac.on.ca]
-- Developer: [srapol7701@conestogac.on.ca]
-- Developer: [yhuang3398@conestogac.on.ca]
+© 2025 L-Connect Development Team. All rights reserved.

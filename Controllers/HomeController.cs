@@ -40,7 +40,14 @@ public class HomeController : Controller
             return View();
         }
      
+    //privacy page
     public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    //Terms page
+    public IActionResult Terms()
     {
         return View();
     }
