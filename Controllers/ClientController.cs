@@ -10,6 +10,7 @@ using L_Connect.Models.Domain;
 using L_Connect.Models.ViewModels.Client;
 using L_Connect.Models.ViewModels.Documents;
 using L_Connect.Models;
+using L_Connect.Models.ViewModels.Shipments;
 
 namespace L_Connect.Controllers
 {
@@ -168,6 +169,56 @@ namespace L_Connect.Controllers
                 "cancelled" => "bg-danger",
                 _ => "bg-secondary"
             };
+        }
+
+        [Authorize(Roles = "CLIENT")]
+        public async Task<IActionResult> ShipmentDetails(string trackingNumber)
+        {
+            if (string.IsNullOrEmpty(trackingNumber))
+            {
+                return RedirectToAction("Dashboard");
+            }
+            
+            // Get the shipment by tracking number
+            var shipment = await _shipmentService.GetShipmentByTrackingNumberAsync(trackingNumber);
+            if (shipment == null)
+            {
+                return NotFound();
+            }
+            
+            // Verify that the logged-in client owns this shipment
+            int clientId = GetCurrentClientId();
+            if (shipment.ClientId != clientId)
+            {
+                return Forbid(); // Client doesn't own this shipment
+            }
+            
+            // Get status history
+            var statusHistory = await _shipmentService.GetShipmentStatusHistoryAsync(shipment.ShipmentId);
+            
+            // Get documents for this shipment
+            var documents = await _documentService.GetDocumentsByShipmentAsync(shipment.ShipmentId);
+            var documentViewModels = documents.Select(d => new DocumentViewModel
+            {
+                DocumentID = d.DocumentID,
+                FileName = d.OriginalFileName,
+                DocumentTypeName = d.DocumentType?.TypeName ?? "Unknown Type",
+                ContentType = d.ContentType ?? "application/octet-stream",
+                FileSize = d.FileSize,
+                FileSizeFormatted = Utils.FormatFileSize(d.FileSize),
+                UploadedByName = d.UploadedByUser?.FullName ?? "Admin",
+                UploadedDate = d.UploadedDate
+            }).ToList();
+            
+            // Create a view model
+            var viewModel = new ShipmentDetailsViewModel
+            {
+                Shipment = shipment,
+                StatusHistory = statusHistory,
+                Documents = documentViewModels
+            };
+            
+            return View(viewModel);
         }
     }
 }
